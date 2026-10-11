@@ -7,13 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		09EFC4271A5A9D0233B1B22D /* BootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4BA0D240E2949166902C79 /* BootView.swift */; };
+		1D4DBC8529D396608AD11500 /* BattleScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F8EDCFCE03BE1D2E536929 /* BattleScene.swift */; };
 		260BD1CB78F36BE98A0CE27A /* GoblinForgeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CEEE34A5038604A54D42E7 /* GoblinForgeApp.swift */; };
 		3C81B4649E2D2C3BE883C811 /* strings.json in Resources */ = {isa = PBXBuildFile; fileRef = 7E37431DFA3E280367DC4F08 /* strings.json */; };
+		4AA3F9120DF9F148C444485F /* ForgePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8976E603D9CDD2D44AF0493 /* ForgePanel.swift */; };
 		5E6207DC48893D6313C39F76 /* GoblinForgeCore in Frameworks */ = {isa = PBXBuildFile; productRef = 139A0EDF768C105170BC8CA2 /* GoblinForgeCore */; };
+		626527101A53F1F1275E1EF5 /* SessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90DFEA00F5F4C1241B0C6B0C /* SessionStore.swift */; };
+		83433BEDCC320A9EF2FDCF0C /* SessionViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F95BD5951A6F3B341315188 /* SessionViews.swift */; };
+		919EB857213B71CEBB62419A /* PrototypeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF3BAFCAA3D16AF61A788F4 /* PrototypeController.swift */; };
 		93D8912F7A5F9290C307C898 /* L10n.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7632AC9EDA12AE4030DFBB8E /* L10n.swift */; };
 		BB55507C93BD84C660638680 /* LaunchUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A4FADB18FBBDA61335343 /* LaunchUITests.swift */; };
 		BD32A0AEEA00B92C6E25AF78 /* BootTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841FFC12CF2F64ED22A4F8CC /* BootTests.swift */; };
+		C1601F98349E0FF46EF50221 /* Feedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E365EBD65563AC959331FF0 /* Feedback.swift */; };
+		C395FF6AC1D85AB58EC7641F /* PrototypeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D86E389FEC965FAEC7DF3F57 /* PrototypeUITests.swift */; };
+		D805349EDFB4B9E9F503021D /* PlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DBA03F5605D346CDE81822 /* PlayView.swift */; };
+		E97496689257FD70395837B6 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 738351C46BA89E755388E6DF /* Theme.swift */; };
+		FDBABAA2219474EB95E5619E /* m0_cases.json in Resources */ = {isa = PBXBuildFile; fileRef = 7EF3266029F9AEE481FB7D7C /* m0_cases.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,15 +44,24 @@
 
 /* Begin PBXFileReference section */
 		1263B5E361A99F68C87B4BCE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		1E365EBD65563AC959331FF0 /* Feedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feedback.swift; sourceTree = "<group>"; };
+		31DBA03F5605D346CDE81822 /* PlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayView.swift; sourceTree = "<group>"; };
 		46912C7147B46C016EC91347 /* GoblinForgeUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = GoblinForgeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5F95BD5951A6F3B341315188 /* SessionViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionViews.swift; sourceTree = "<group>"; };
 		66CEEE34A5038604A54D42E7 /* GoblinForgeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoblinForgeApp.swift; sourceTree = "<group>"; };
 		6AAB7F9DD2B327CD0EC4ADEA /* GoblinForgeCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = GoblinForgeCore; path = ../Packages/GoblinForgeCore; sourceTree = SOURCE_ROOT; };
+		738351C46BA89E755388E6DF /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		7632AC9EDA12AE4030DFBB8E /* L10n.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = L10n.swift; sourceTree = "<group>"; };
 		7BC6F2E6BFBB842EC132EDB9 /* GoblinForge.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = GoblinForge.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7CF3BAFCAA3D16AF61A788F4 /* PrototypeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrototypeController.swift; sourceTree = "<group>"; };
 		7E37431DFA3E280367DC4F08 /* strings.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = strings.json; sourceTree = "<group>"; };
+		7EF3266029F9AEE481FB7D7C /* m0_cases.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = m0_cases.json; sourceTree = "<group>"; };
 		841FFC12CF2F64ED22A4F8CC /* BootTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BootTests.swift; sourceTree = "<group>"; };
 		892A4FADB18FBBDA61335343 /* LaunchUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchUITests.swift; sourceTree = "<group>"; };
-		BF4BA0D240E2949166902C79 /* BootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BootView.swift; sourceTree = "<group>"; };
+		90DFEA00F5F4C1241B0C6B0C /* SessionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionStore.swift; sourceTree = "<group>"; };
+		B8976E603D9CDD2D44AF0493 /* ForgePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgePanel.swift; sourceTree = "<group>"; };
+		C4F8EDCFCE03BE1D2E536929 /* BattleScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BattleScene.swift; sourceTree = "<group>"; };
+		D86E389FEC965FAEC7DF3F57 /* PrototypeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrototypeUITests.swift; sourceTree = "<group>"; };
 		F851B4D51FA416ECBEE153F0 /* GoblinForgeTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = GoblinForgeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -59,6 +77,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		499B7BB716CCFD40A0D39D28 /* Scene */ = {
+			isa = PBXGroup;
+			children = (
+				C4F8EDCFCE03BE1D2E536929 /* BattleScene.swift */,
+			);
+			path = Scene;
+			sourceTree = "<group>";
+		};
+		6A52A4BC3B693803F83933AB /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				B8976E603D9CDD2D44AF0493 /* ForgePanel.swift */,
+				31DBA03F5605D346CDE81822 /* PlayView.swift */,
+				5F95BD5951A6F3B341315188 /* SessionViews.swift */,
+				738351C46BA89E755388E6DF /* Theme.swift */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
 		7457F5CCA132143CFC2168FF /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -72,9 +109,9 @@
 		90ABF336489C6D706C545A17 /* App */ = {
 			isa = PBXGroup;
 			children = (
-				BF4BA0D240E2949166902C79 /* BootView.swift */,
 				66CEEE34A5038604A54D42E7 /* GoblinForgeApp.swift */,
 				7632AC9EDA12AE4030DFBB8E /* L10n.swift */,
+				7CF3BAFCAA3D16AF61A788F4 /* PrototypeController.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -83,6 +120,7 @@
 			isa = PBXGroup;
 			children = (
 				892A4FADB18FBBDA61335343 /* LaunchUITests.swift */,
+				D86E389FEC965FAEC7DF3F57 /* PrototypeUITests.swift */,
 			);
 			path = GoblinForgeUITests;
 			sourceTree = "<group>";
@@ -95,6 +133,15 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		AE58B2C8CA59792E77B460BB /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				1E365EBD65563AC959331FF0 /* Feedback.swift */,
+				90DFEA00F5F4C1241B0C6B0C /* SessionStore.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		C11981D2B9E70639DD5BA28B = {
 			isa = PBXGroup;
 			children = (
@@ -102,6 +149,7 @@
 				D39CF7285D6AD99B6D6B1B93 /* GoblinForgeTests */,
 				95B7368042E59443F9772614 /* GoblinForgeUITests */,
 				C88A3C82F71C98B9C0D9C244 /* Packages */,
+				DFFC7CA6567FA278F9503832 /* prototype */,
 				7457F5CCA132143CFC2168FF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -126,10 +174,22 @@
 			isa = PBXGroup;
 			children = (
 				90ABF336489C6D706C545A17 /* App */,
+				6A52A4BC3B693803F83933AB /* Presentation */,
 				A617C4C68606F6588AA41224 /* Resources */,
+				499B7BB716CCFD40A0D39D28 /* Scene */,
+				AE58B2C8CA59792E77B460BB /* Services */,
 				1263B5E361A99F68C87B4BCE /* Info.plist */,
 			);
 			path = GoblinForge;
+			sourceTree = "<group>";
+		};
+		DFFC7CA6567FA278F9503832 /* prototype */ = {
+			isa = PBXGroup;
+			children = (
+				7EF3266029F9AEE481FB7D7C /* m0_cases.json */,
+			);
+			name = prototype;
+			path = ../config/prototype;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -244,6 +304,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FDBABAA2219474EB95E5619E /* m0_cases.json in Resources */,
 				3C81B4649E2D2C3BE883C811 /* strings.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -264,6 +325,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BB55507C93BD84C660638680 /* LaunchUITests.swift in Sources */,
+				C395FF6AC1D85AB58EC7641F /* PrototypeUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -271,9 +333,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				09EFC4271A5A9D0233B1B22D /* BootView.swift in Sources */,
+				1D4DBC8529D396608AD11500 /* BattleScene.swift in Sources */,
+				C1601F98349E0FF46EF50221 /* Feedback.swift in Sources */,
+				4AA3F9120DF9F148C444485F /* ForgePanel.swift in Sources */,
 				260BD1CB78F36BE98A0CE27A /* GoblinForgeApp.swift in Sources */,
 				93D8912F7A5F9290C307C898 /* L10n.swift in Sources */,
+				D805349EDFB4B9E9F503021D /* PlayView.swift in Sources */,
+				919EB857213B71CEBB62419A /* PrototypeController.swift in Sources */,
+				626527101A53F1F1275E1EF5 /* SessionStore.swift in Sources */,
+				83433BEDCC320A9EF2FDCF0C /* SessionViews.swift in Sources */,
+				E97496689257FD70395837B6 /* Theme.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

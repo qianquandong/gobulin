@@ -1,17 +1,27 @@
 import XCTest
 
-/// BOOT-01 冒烟：冷启动显示英文标题与开始提示，战场 SpriteKit 视图存在；截图作为附件保存。
+/// 冷启动冒烟：主持人设置页（英文），输入编号并选择题序后进入首分钟演示，可立即敲铁砧。
 final class LaunchUITests: XCTestCase {
-    func testColdLaunchShowsEnglishTitle() {
+    func testColdLaunchShowsHostSetupThenDemo() {
         let app = XCUIApplication()
         app.launch()
-        XCTAssertTrue(app.staticTexts["title.name"].waitForExistence(timeout: 20))
-        XCTAssertEqual(app.staticTexts["title.name"].label, "Goblin Forge")
-        XCTAssertEqual(app.staticTexts["title.tap"].label, "Tap to start")
-        XCTAssertTrue(app.otherElements["battlefield"].exists || app.images["battlefield"].exists
-                      || app.descendants(matching: .any)["battlefield"].exists)
+        XCTAssertTrue(app.staticTexts["host.title"].waitForExistence(timeout: 20))
+        XCTAssertEqual(app.staticTexts["host.title"].label, "Session Setup")
+        let field = app.textFields["host.participant"]
+        field.tap()
+        field.typeText("P99")
+        app.buttons["host.proto_order_b"].tap()
+        attach(app, "M0-host-setup")
+        app.buttons["host.start"].tap()
+        XCTAssertTrue(app.buttons["forge.zone.blade"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["hud.hp"].waitForExistence(timeout: 5))
+        XCTAssertEqual(app.staticTexts["hud.hp"].label, "HP 100/100")
+        attach(app, "M0-demo-start")
+    }
+
+    private func attach(_ app: XCUIApplication, _ name: String) {
         let shot = XCTAttachment(screenshot: app.screenshot())
-        shot.name = "BOOT-01-launch"
+        shot.name = name
         shot.lifetime = .keepAlways
         add(shot)
     }

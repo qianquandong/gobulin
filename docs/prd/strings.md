@@ -425,6 +425,23 @@
 |---|---|---|---|
 | `prototype_continue` | You can finish now, or keep playing for up to three minutes. Your compensation stays the same. | 自由继续阶段的中性邀请；仅有报酬的测试使用最后一句 | 主持人口头脚本 |
 | `prototype_reason` | What did you change, and why? | 两道迁移题结束后的开放式问题 | 主持人口头脚本 |
+| `proto_host_title` | Session Setup | M0 主持人设置页标题（Claude 新增，M0-03） | 主持人设置页（≤ 18） |
+| `proto_participant` | Participant ID | 参与者编号输入框标签（只填匿名编号） | 主持人设置页 |
+| `proto_order` | Transfer order | 两道迁移题的顺序 | 主持人设置页 |
+| `proto_order_a` | A then B | 题序 A→B | 主持人设置页（≤ 14） |
+| `proto_order_b` | B then A | 题序 B→A | 主持人设置页（≤ 14） |
+| `proto_start` | Start | 开始本场试玩 | 主持人设置页（≤ 14） |
+| `proto_resume` | Restart {case} | 技术中断后从当前测试块重新开始 | 主持人设置页（≤ 30） |
+| `proto_next` | Next | 进入下一题 | 胜利卡片、首分钟完成后（≤ 14） |
+| `proto_try` | Try {attempt}/{max} | 迁移题第几次尝试 | 战场顶部（≤ 18） |
+| `proto_host_menu` | Host | 主持人菜单标题 | 主持人菜单（隐藏手势打开） |
+| `proto_skip` | Skip case | 主持人跳过当前题（不计主指标） | 主持人菜单（≤ 14） |
+| `proto_end` | End session | 主持人结束本场 | 主持人菜单（≤ 14） |
+| `proto_export` | Export log | 导出本场 JSONL 日志 | 主持人菜单、结束页（≤ 14） |
+| `proto_interview` | Ask the player: | 事后解释页，下接 `prototype_reason` | 解释页（主持人看） |
+| `proto_free_play` | Keep playing | 参与者选择自由继续 | 解释页（≤ 14） |
+| `proto_finish` | Finish | 参与者选择结束 | 解释页（≤ 14） |
+| `proto_done` | Session complete | 结束页标题 | 结束页（≤ 18） |
 
 ## 问卷
 

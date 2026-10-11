@@ -27,7 +27,7 @@ row "UIDeviceFamily" "$family" "$([ "$family" = "Array{1}" ] && echo PASS || ech
 row "Bundle ID" "$(value CFBundleIdentifier)" "PASS"
 
 # 调试入口（启动参数、探针、调试菜单）只能存在于 Debug 构建
-for marker in "-gf-case" "-gf-seed" "-gf-skip-intro" "debug.probe" "Debug menu"; do
+for marker in "-gf-case" "-gf-participant" "debug.probe" "UITEST"; do
   if strings -a "$binary" | grep -qF -- "$marker"; then
     row "无调试入口：$marker" "found" "FAIL"
   else
