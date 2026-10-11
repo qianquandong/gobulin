@@ -455,7 +455,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.GoblinForge;
 				PRODUCT_NAME = GoblinForge;
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -523,7 +523,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.GoblinForge;
 				PRODUCT_NAME = GoblinForge;
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Prototype;
 		};

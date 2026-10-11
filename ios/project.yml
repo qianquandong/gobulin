@@ -64,6 +64,9 @@ targets:
         # 占位 Bundle ID（example.com 保留域名），真机签名前由负责人确定真实值。
         PRODUCT_BUNDLE_IDENTIFIER: com.example.GoblinForge
         PRODUCT_NAME: GoblinForge
+        # 仅 iPhone。XcodeGen 的 application 预设在 target 层设 "1,2"，会覆盖工程层设置，必须在这里再写一次
+        # （CI run 38162394597 的二进制检查发现 UIDeviceFamily = [1, 2]）
+        TARGETED_DEVICE_FAMILY: "1"
   GoblinForgeTests:
     type: bundle.unit-test
     platform: iOS
