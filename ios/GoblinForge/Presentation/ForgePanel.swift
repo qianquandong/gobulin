@@ -272,7 +272,7 @@ struct FloatingLabel: View {
 struct ZoneGlyph: View {
     let zone: ForgeZone
     let points: Int
-    let form: Form
+    let form: GoblinForgeCore.Form
 
     var body: some View {
         Canvas { context, size in
