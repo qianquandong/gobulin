@@ -1,0 +1,586 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		09EFC4271A5A9D0233B1B22D /* BootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4BA0D240E2949166902C79 /* BootView.swift */; };
+		260BD1CB78F36BE98A0CE27A /* GoblinForgeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CEEE34A5038604A54D42E7 /* GoblinForgeApp.swift */; };
+		3C81B4649E2D2C3BE883C811 /* strings.json in Resources */ = {isa = PBXBuildFile; fileRef = 7E37431DFA3E280367DC4F08 /* strings.json */; };
+		5E6207DC48893D6313C39F76 /* GoblinForgeCore in Frameworks */ = {isa = PBXBuildFile; productRef = 139A0EDF768C105170BC8CA2 /* GoblinForgeCore */; };
+		93D8912F7A5F9290C307C898 /* L10n.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7632AC9EDA12AE4030DFBB8E /* L10n.swift */; };
+		BB55507C93BD84C660638680 /* LaunchUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A4FADB18FBBDA61335343 /* LaunchUITests.swift */; };
+		BD32A0AEEA00B92C6E25AF78 /* BootTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841FFC12CF2F64ED22A4F8CC /* BootTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		9192A146EF6250DF93C254CB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7C66215DE31F7C7F0D636625 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CCE0EFEC483D714A7F1F07F2;
+			remoteInfo = GoblinForge;
+		};
+		BE510EC3A4D328D0D60B8F22 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7C66215DE31F7C7F0D636625 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CCE0EFEC483D714A7F1F07F2;
+			remoteInfo = GoblinForge;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		1263B5E361A99F68C87B4BCE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		46912C7147B46C016EC91347 /* GoblinForgeUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = GoblinForgeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		66CEEE34A5038604A54D42E7 /* GoblinForgeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoblinForgeApp.swift; sourceTree = "<group>"; };
+		6AAB7F9DD2B327CD0EC4ADEA /* GoblinForgeCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = GoblinForgeCore; path = ../Packages/GoblinForgeCore; sourceTree = SOURCE_ROOT; };
+		7632AC9EDA12AE4030DFBB8E /* L10n.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = L10n.swift; sourceTree = "<group>"; };
+		7BC6F2E6BFBB842EC132EDB9 /* GoblinForge.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = GoblinForge.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7E37431DFA3E280367DC4F08 /* strings.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = strings.json; sourceTree = "<group>"; };
+		841FFC12CF2F64ED22A4F8CC /* BootTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BootTests.swift; sourceTree = "<group>"; };
+		892A4FADB18FBBDA61335343 /* LaunchUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchUITests.swift; sourceTree = "<group>"; };
+		BF4BA0D240E2949166902C79 /* BootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BootView.swift; sourceTree = "<group>"; };
+		F851B4D51FA416ECBEE153F0 /* GoblinForgeTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = GoblinForgeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DB78A1C1F7AA44EDE2825926 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5E6207DC48893D6313C39F76 /* GoblinForgeCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		7457F5CCA132143CFC2168FF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7BC6F2E6BFBB842EC132EDB9 /* GoblinForge.app */,
+				F851B4D51FA416ECBEE153F0 /* GoblinForgeTests.xctest */,
+				46912C7147B46C016EC91347 /* GoblinForgeUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		90ABF336489C6D706C545A17 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				BF4BA0D240E2949166902C79 /* BootView.swift */,
+				66CEEE34A5038604A54D42E7 /* GoblinForgeApp.swift */,
+				7632AC9EDA12AE4030DFBB8E /* L10n.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		95B7368042E59443F9772614 /* GoblinForgeUITests */ = {
+			isa = PBXGroup;
+			children = (
+				892A4FADB18FBBDA61335343 /* LaunchUITests.swift */,
+			);
+			path = GoblinForgeUITests;
+			sourceTree = "<group>";
+		};
+		A617C4C68606F6588AA41224 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				7E37431DFA3E280367DC4F08 /* strings.json */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		C11981D2B9E70639DD5BA28B = {
+			isa = PBXGroup;
+			children = (
+				DDFFB40703A42E1BA84014C8 /* GoblinForge */,
+				D39CF7285D6AD99B6D6B1B93 /* GoblinForgeTests */,
+				95B7368042E59443F9772614 /* GoblinForgeUITests */,
+				C88A3C82F71C98B9C0D9C244 /* Packages */,
+				7457F5CCA132143CFC2168FF /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C88A3C82F71C98B9C0D9C244 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				6AAB7F9DD2B327CD0EC4ADEA /* GoblinForgeCore */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+		D39CF7285D6AD99B6D6B1B93 /* GoblinForgeTests */ = {
+			isa = PBXGroup;
+			children = (
+				841FFC12CF2F64ED22A4F8CC /* BootTests.swift */,
+			);
+			path = GoblinForgeTests;
+			sourceTree = "<group>";
+		};
+		DDFFB40703A42E1BA84014C8 /* GoblinForge */ = {
+			isa = PBXGroup;
+			children = (
+				90ABF336489C6D706C545A17 /* App */,
+				A617C4C68606F6588AA41224 /* Resources */,
+				1263B5E361A99F68C87B4BCE /* Info.plist */,
+			);
+			path = GoblinForge;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		BD158653D0E5B2DE99BCA7EA /* GoblinForgeUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7E705E0EE727D4472EE12D6C /* Build configuration list for PBXNativeTarget "GoblinForgeUITests" */;
+			buildPhases = (
+				2AC1215728BDFCC75CF0E0BF /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6B3BD5967808EC908CA55F60 /* PBXTargetDependency */,
+			);
+			name = GoblinForgeUITests;
+			packageProductDependencies = (
+			);
+			productName = GoblinForgeUITests;
+			productReference = 46912C7147B46C016EC91347 /* GoblinForgeUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		CCE0EFEC483D714A7F1F07F2 /* GoblinForge */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9747744D1D14B3B889901E3E /* Build configuration list for PBXNativeTarget "GoblinForge" */;
+			buildPhases = (
+				DC64A18AA35B615FBFF6EE55 /* Sources */,
+				9AD0AC4E32F677B0E98D0F9C /* Resources */,
+				DB78A1C1F7AA44EDE2825926 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GoblinForge;
+			packageProductDependencies = (
+				139A0EDF768C105170BC8CA2 /* GoblinForgeCore */,
+			);
+			productName = GoblinForge;
+			productReference = 7BC6F2E6BFBB842EC132EDB9 /* GoblinForge.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F69DB9B3E2AE8A6D26F9870C /* GoblinForgeTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0F26BCD90254A4E0C87BA3E0 /* Build configuration list for PBXNativeTarget "GoblinForgeTests" */;
+			buildPhases = (
+				0CD0EEDD46E1EBC6208A661B /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E632EED938DC14B179E135BD /* PBXTargetDependency */,
+			);
+			name = GoblinForgeTests;
+			packageProductDependencies = (
+			);
+			productName = GoblinForgeTests;
+			productReference = F851B4D51FA416ECBEE153F0 /* GoblinForgeTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7C66215DE31F7C7F0D636625 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					BD158653D0E5B2DE99BCA7EA = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+						TestTargetID = CCE0EFEC483D714A7F1F07F2;
+					};
+					CCE0EFEC483D714A7F1F07F2 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+					F69DB9B3E2AE8A6D26F9870C = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = CA366000C941734890114F78 /* Build configuration list for PBXProject "GoblinForge" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = C11981D2B9E70639DD5BA28B;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				1EC082C05701BC77D02F4588 /* XCLocalSwiftPackageReference "../Packages/GoblinForgeCore" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 7457F5CCA132143CFC2168FF /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CCE0EFEC483D714A7F1F07F2 /* GoblinForge */,
+				F69DB9B3E2AE8A6D26F9870C /* GoblinForgeTests */,
+				BD158653D0E5B2DE99BCA7EA /* GoblinForgeUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		9AD0AC4E32F677B0E98D0F9C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3C81B4649E2D2C3BE883C811 /* strings.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0CD0EEDD46E1EBC6208A661B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BD32A0AEEA00B92C6E25AF78 /* BootTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2AC1215728BDFCC75CF0E0BF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BB55507C93BD84C660638680 /* LaunchUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DC64A18AA35B615FBFF6EE55 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				09EFC4271A5A9D0233B1B22D /* BootView.swift in Sources */,
+				260BD1CB78F36BE98A0CE27A /* GoblinForgeApp.swift in Sources */,
+				93D8912F7A5F9290C307C898 /* L10n.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6B3BD5967808EC908CA55F60 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CCE0EFEC483D714A7F1F07F2 /* GoblinForge */;
+			targetProxy = BE510EC3A4D328D0D60B8F22 /* PBXContainerItemProxy */;
+		};
+		E632EED938DC14B179E135BD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CCE0EFEC483D714A7F1F07F2 /* GoblinForge */;
+			targetProxy = 9192A146EF6250DF93C254CB /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		66769C8A87DD9D7B2A5D56EE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		7598E99A887578F1E8E6036E /* Prototype */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.GoblinForge.uitests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = GoblinForge;
+			};
+			name = Prototype;
+		};
+		80BB87E47A95013D89984378 /* Prototype */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = PROTOTYPE;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Prototype;
+		};
+		83B02D30A2B741D25FDC1B3F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = GoblinForge/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.GoblinForge;
+				PRODUCT_NAME = GoblinForge;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		916DAC06900B48884FB94EE1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.GoblinForge.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GoblinForge.app/GoblinForge";
+			};
+			name = Debug;
+		};
+		A9257BB872B5AF0546EB78B5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.GoblinForge.uitests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = GoblinForge;
+			};
+			name = Debug;
+		};
+		B5916B6070DD69B5C5C655CF /* Prototype */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.GoblinForge.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GoblinForge.app/GoblinForge";
+			};
+			name = Prototype;
+		};
+		E2A0CF954CF63D221633E5A0 /* Prototype */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = GoblinForge/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.GoblinForge;
+				PRODUCT_NAME = GoblinForge;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Prototype;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0F26BCD90254A4E0C87BA3E0 /* Build configuration list for PBXNativeTarget "GoblinForgeTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				916DAC06900B48884FB94EE1 /* Debug */,
+				B5916B6070DD69B5C5C655CF /* Prototype */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		7E705E0EE727D4472EE12D6C /* Build configuration list for PBXNativeTarget "GoblinForgeUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9257BB872B5AF0546EB78B5 /* Debug */,
+				7598E99A887578F1E8E6036E /* Prototype */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		9747744D1D14B3B889901E3E /* Build configuration list for PBXNativeTarget "GoblinForge" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				83B02D30A2B741D25FDC1B3F /* Debug */,
+				E2A0CF954CF63D221633E5A0 /* Prototype */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		CA366000C941734890114F78 /* Build configuration list for PBXProject "GoblinForge" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				66769C8A87DD9D7B2A5D56EE /* Debug */,
+				80BB87E47A95013D89984378 /* Prototype */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		1EC082C05701BC77D02F4588 /* XCLocalSwiftPackageReference "../Packages/GoblinForgeCore" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../Packages/GoblinForgeCore;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		139A0EDF768C105170BC8CA2 /* GoblinForgeCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = GoblinForgeCore;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 7C66215DE31F7C7F0D636625 /* Project object */;
+}

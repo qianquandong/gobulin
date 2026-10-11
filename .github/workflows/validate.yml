@@ -1,0 +1,24 @@
+name: PRD 与模拟器一致性
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        python: ['3.11', '3.14']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python tools/check_prd.py
+      - run: python -m unittest discover -s tools -p "test_*.py" -v
+      - run: python tools/export_strings.py --check
