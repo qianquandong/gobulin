@@ -535,8 +535,10 @@ final class PrototypeController: ObservableObject {
         }
         let waves = run.currentCase?.waves ?? []
         let wave = waves.isEmpty ? [] : waves[min(battle.waveIndex, waves.count - 1)]
-        live.waveTrait = wave.max { $0.count < $1.count }?.kind.trait
-        live.waveCount = wave.reduce(0) { $0 + $1.count }
+        // 接缝条只写主要特性及其数量（混合波次只计该特性的敌人，避免把 Shellback 算进 Swarm）
+        let mainTrait = wave.max { $0.count < $1.count }?.kind.trait
+        live.waveTrait = mainTrait
+        live.waveCount = wave.filter { $0.kind.trait == mainTrait }.reduce(0) { $0 + $1.count }
         #if DEBUG
         live.debugProbe = "case=\(caseID) attempt=\(run.attempt) wave=\(live.wave) swings=\(swingsThisAttempt) "
             + "multi=\(multiHitsThisAttempt) goal=\(run.demoGoalReached ? 1 : 0) hp=\(live.heroHP) "

@@ -41,6 +41,17 @@ docker run --rm -v "$PWD:/gobulin" -w /gobulin swift:6.2 swift test --package-pa
 
 `ios.yml` 的证据（环境记录、截图、UI 附件、日志、xcresult）作为 Actions artifact 保存。它们来自 GitHub 托管 runner 与模拟器，**不是真机证据**。只改 `docs/**` 或根目录 `*.md` 时 `ios.yml` 不运行。
 
+## M0 原型怎么跑
+
+1. 冷启动进入主持人设置页：输入匿名参与者编号（不填姓名），选择迁移题顺序 `A then B` / `B then A`（逐人交替），点 Start。
+2. 流程：首分钟演示 → 3 个学习题 → 2 道迁移题 → 事后解释页（主持人照读 `prototype_reason` 与 `prototype_continue`）→ 参与者选择 Finish 或 Keep playing（最多 3 分钟）。
+3. 主持人菜单：战场右上角长按 1.5 s。可跳过当前题（学习超时等，记 `host_skip`，不计主指标）、导出日志、结束本场。
+4. 崩溃或被杀后重开：设置页出现 `Restart n/6`，从中断的测试块重新开始，日志追加到同一文件并记 `technical_interrupt`。
+5. 日志：`Documents/logs/<编号>-<时间>.jsonl`，每行一个事件（字段见 PRD 0.5）。结束页或主持人菜单可 Export log；也可在 Mac 的 Finder 设备页或“文件” App 中取出。日志不含姓名与联系方式。
+6. 场景配置：`config/prototype/m0_cases.json`（打包进 App）。改数值后运行 `python3 tools/prototype_cases.py` 与 `--write-reference`（在 Linux 上），见 [校准发现](m0-04-calibration-findings.md)。
+
+Debug 构建的测试参数（Prototype 配置中不存在，CI 检查二进制）：`-gf-case <case_id>` 跳过设置页直接进入某题，`-gf-participant <id>`，`-gf-rack <b>/<h>/<r>` 替换起始武器。
+
 ## 真机安装
 
 **当前状态：BLOCKED**——需要负责人提供 Mac、iPhone（型号/系统）和 Apple 账号。M0 只需一台团队现有 iPhone（PRD 0.2）。
