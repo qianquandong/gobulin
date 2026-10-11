@@ -1,0 +1,60 @@
+{
+ "config_version": "m0-draft-2026-10-11",
+ "status": "DRAFT — not calibrated. Transfer waves are the PRD 0.3 starting drafts; learning waves are Claude placeholders. Codex tunes and freezes before day 6 (backlog M0-04). Run: python tools/prototype_cases.py",
+ "seed_formula": "battle seed = attempt_seeds[attempt - 1] * 1000 + growth_stage (same as balance_sim.simulate)",
+ "transfer_orders": [
+  ["transfer_swarm_armor", "transfer_guard_swarm"],
+  ["transfer_guard_swarm", "transfer_swarm_armor"]
+ ],
+ "cases": [
+  {
+   "id": "demo", "kind": "demo", "trait": "swarm",
+   "md": 10, "budget": 7, "hero_hp": 100, "growth_stage": 1, "runes": [],
+   "initial_rack": [{"b": 2, "h": 2}],
+   "waves": [[["mushling", 6, "R"]]],
+   "loop_waves": true, "hero_min_hp": 1,
+   "attempt_seeds": [1], "max_attempts": 0, "max_seconds": 0,
+   "answers": []
+  },
+  {
+   "id": "learn_swarm", "kind": "learning", "trait": "swarm",
+   "md": 20, "budget": 10, "hero_hp": 164, "growth_stage": 8, "runes": ["ember"],
+   "initial_rack": [{"b": 3, "h": 6}],
+   "waves": [[["mushling", 16, "A"]]],
+   "attempt_seeds": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], "max_attempts": 0, "max_seconds": 0,
+   "answers": [{"label": "Broad B4/H6", "b": 4, "h": 6}, {"label": "Great B8/H2", "b": 8, "h": 2}]
+  },
+  {
+   "id": "learn_armor", "kind": "learning", "trait": "armor",
+   "md": 20, "budget": 10, "hero_hp": 164, "growth_stage": 8, "runes": ["ember"],
+   "initial_rack": [{"b": 3, "h": 6}],
+   "waves": [[["shellback", 3, "A"]]],
+   "attempt_seeds": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], "max_attempts": 0, "max_seconds": 0,
+   "answers": [{"label": "Great B8/H2", "b": 8, "h": 2}, {"label": "Needle B3/H4/R3 Ember", "b": 3, "h": 4, "r": 3, "rune": "ember"}]
+  },
+  {
+   "id": "learn_guard", "kind": "learning", "trait": "guard",
+   "md": 20, "budget": 10, "hero_hp": 164, "growth_stage": 8, "runes": ["ember"],
+   "initial_rack": [{"b": 3, "h": 6}],
+   "waves": [[["sprite", 6, "A"]]],
+   "attempt_seeds": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], "max_attempts": 0, "max_seconds": 0,
+   "answers": [{"label": "Broad B4/H6", "b": 4, "h": 6}, {"label": "Broad B4/H3/R3 Ember", "b": 4, "h": 3, "r": 3, "rune": "ember"}]
+  },
+  {
+   "id": "transfer_swarm_armor", "kind": "transfer", "trait": "swarm",
+   "md": 20, "budget": 10, "hero_hp": 164, "growth_stage": 8, "runes": ["ember"],
+   "initial_rack": [{"b": 3, "h": 6}],
+   "waves": [[["mushling", 4, "A"], ["shellback", 1, "R"]]],
+   "attempt_seeds": [1, 2, 3], "max_attempts": 3, "max_seconds": 180,
+   "answers": [{"label": "Great B8/H2", "b": 8, "h": 2}, {"label": "Broad B4/H3/R3 Ember", "b": 4, "h": 3, "r": 3, "rune": "ember"}]
+  },
+  {
+   "id": "transfer_guard_swarm", "kind": "transfer", "trait": "guard",
+   "md": 20, "budget": 10, "hero_hp": 164, "growth_stage": 8, "runes": ["ember"],
+   "initial_rack": [{"b": 3, "h": 6}],
+   "waves": [[["sprite", 2, "T"], ["mushling", 3, "A"]]],
+   "attempt_seeds": [1, 2, 3], "max_attempts": 3, "max_seconds": 180,
+   "answers": [{"label": "Broad B4/H6", "b": 4, "h": 6}, {"label": "Needle B3/H4/R3 Ember", "b": 3, "h": 4, "r": 3, "rune": "ember"}]
+  }
+ ]
+}

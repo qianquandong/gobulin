@@ -9,15 +9,22 @@ public struct BattleSetup: Codable, Equatable, Sendable {
     public var seed: UInt64
     public var normalTimeLimit: Double
     public var bossTimeLimit: Double
+    /// 首分钟演示：英雄 HP 最低为此值、不会战败（PRD 3.1 首局保护规则 3）；正式与测试场景为 nil
+    public var heroMinHP: Int?
+    /// 首分钟演示：最后一波清完后从第一波重新刷（PRD 3.2：未看到效果就重置演示敌人）；不计时
+    public var loopWaves: Bool
 
     public init(waves: [Wave], growthStage: Int, heroHP: Int, seed: UInt64,
-                normalTimeLimit: Double = 90, bossTimeLimit: Double = 120) {
+                normalTimeLimit: Double = 90, bossTimeLimit: Double = 120,
+                heroMinHP: Int? = nil, loopWaves: Bool = false) {
         self.waves = waves
         self.growthStage = growthStage
         self.heroHP = heroHP
         self.seed = seed
         self.normalTimeLimit = normalTimeLimit
         self.bossTimeLimit = bossTimeLimit
+        self.heroMinHP = heroMinHP
+        self.loopWaves = loopWaves
     }
 
     /// 正式关卡（与 `simulate(stage, wpn, hero_hp, seed)` 相同的输入）
@@ -250,7 +257,10 @@ public final class Battle {
             t += Battle.waveGap
             waveIndex += 1
             waveStarted = false
-            if waveIndex >= setup.waves.count {
+            if waveIndex >= setup.waves.count && setup.loopWaves {
+                waveIndex = 0
+                breakTicksLeft = Battle.breakTicks
+            } else if waveIndex >= setup.waves.count {
                 finish(.victory)
             } else {
                 breakTicksLeft = Battle.breakTicks
@@ -389,10 +399,12 @@ public final class Battle {
         for e in units where e.hp <= 0 { events.append(.died(unitID: e.id)) }
         units.removeAll { $0.hp <= 0 }
         t += dt
+        if let floor = setup.heroMinHP { heroHP = max(heroHP, floor) }
         if heroHP <= 0 {
             finish(.defeat(defeatCause(timedOut: false)))
             return
         }
+        if setup.loopWaves { return }   // 演示不计时，由流程决定何时结束
         if bossStart == nil ? t >= setup.normalTimeLimit : t - bossStart! >= setup.bossTimeLimit {
             finish(.defeat(defeatCause(timedOut: true)))
         }

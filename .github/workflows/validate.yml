@@ -23,3 +23,6 @@ jobs:
       - run: python -m unittest discover -s tools -p "test_*.py" -v
       - run: python tools/export_strings.py --check
       - run: python tools/export_core_reference.py --check
+      - run: python tools/prototype_cases.py --check-reference
+      - name: M0 场景校准报告（信息性；数值由 Codex 校准冻结）
+        run: python tools/prototype_cases.py >> "$GITHUB_STEP_SUMMARY"

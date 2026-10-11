@@ -41,6 +41,10 @@ targets:
           - "Resources/**"
       - path: GoblinForge/Resources
         buildPhase: resources
+      # M0 场景配置（Codex 校准；与 tools/prototype_cases.py 共用同一文件）
+      - path: ../config/prototype/m0_cases.json
+        buildPhase: resources
+        createIntermediateGroups: false
     dependencies:
       - package: GoblinForgeCore
         product: GoblinForgeCore

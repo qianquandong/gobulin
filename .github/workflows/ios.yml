@@ -107,11 +107,14 @@ jobs:
             xcrun xcresulttool export attachments --path build/GoblinForge-small.xcresult --output-path build/attachments-small || true
           fi
 
-      - name: 冷启动截图（标准尺寸）
-        timeout-minutes: 20
+      - name: 冷启动与场景截图（标准尺寸）
+        timeout-minutes: 25
         run: |
           app=build/DerivedData/Build/Products/Debug-iphonesimulator/GoblinForge.app
           bash ci/capture-screenshots.sh "$SIM_STANDARD" "$app" build/screenshots launch-standard
+          for c in demo learn_swarm transfer_swarm_armor; do
+            SCREENSHOT_DELAY=9 bash ci/capture-screenshots.sh "$SIM_STANDARD" "$app" build/screenshots "case-$c" -gf-case "$c"
+          done
 
       - name: Prototype 配置无签名编译（真机架构；调试入口已剔除、未接广告/内购）
         timeout-minutes: 20
