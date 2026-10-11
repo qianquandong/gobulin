@@ -10,8 +10,8 @@ final class PrototypeUITests: XCTestCase {
         app = XCUIApplication()
     }
 
-    private func launch(_ caseID: String) {
-        app.launchArguments = ["-gf-case", caseID, "-gf-participant", "UITEST"]
+    private func launch(_ caseID: String, startWeapon: String? = nil) {
+        app.launchArguments = ["-gf-case", caseID, "-gf-participant", "UITEST"] + (startWeapon.map { ["-gf-rack", $0] } ?? [])
         app.launch()
         XCTAssertTrue(app.buttons["forge.zone.blade"].waitForExistence(timeout: 20))
     }
@@ -82,13 +82,11 @@ final class PrototypeUITests: XCTestCase {
         XCTAssertEqual(app.buttons["forge.zone.rune"].value as? String, "0")
     }
 
-    /// Great 打不破护盾：学习题失败报告显示方向，迁移题不显示任何提示（PRD 0.4、5.8 测试模式覆盖规则）
+    /// Great 打不破护盾：学习题失败报告显示方向，迁移题不显示任何提示（PRD 0.4、5.8 测试模式覆盖规则）。
+    /// 起始武器直接设为 Great B8/H2（Debug 参数 -gf-rack），失败路径可确定复现；锻造交付由首分钟用例覆盖。
     func testDefeatTipShownInLearningButNotInTransfer() {
         for (caseID, expectTip) in [("learn_guard", true), ("transfer_guard_swarm", false)] {
-            launch(caseID)
-            strike("blade", 8)
-            strike("hilt", 2)
-            app.buttons["forge.deliver"].tap()
+            launch(caseID, startWeapon: "8/2/0")
             XCTAssertTrue(app.staticTexts["card.defeat"].waitForExistence(timeout: 120), caseID)
             XCTAssertTrue(app.staticTexts["card.cause"].label.hasPrefix("Guard blocked"), app.staticTexts["card.cause"].label)
             XCTAssertEqual(app.staticTexts["card.tip"].exists, expectTip, caseID)
@@ -97,6 +95,11 @@ final class PrototypeUITests: XCTestCase {
                 XCTAssertFalse(app.staticTexts.containing(NSPredicate(format: "label BEGINSWITH 'Good vs'")).firstMatch.exists)
                 XCTAssertTrue(app.staticTexts["hud.try"].exists)
                 XCTAssertEqual(app.staticTexts["hud.try"].label, "Try 1/3")
+                attach("M0-defeat-\(caseID)")
+                app.buttons["card.retry"].tap()
+                XCTAssertTrue(waitForProbe("attempt", "2", timeout: 5))
+                XCTAssertEqual(app.staticTexts["hud.try"].label, "Try 2/3")
+                continue
             }
             attach("M0-defeat-\(caseID)")
             app.terminate()

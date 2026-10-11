@@ -130,6 +130,9 @@ final class PrototypeController: ObservableObject {
     }
 
     #if DEBUG
+    /// UI 测试：替换场景的起始武器（B/H/R），让失败路径可确定地复现
+    var debugStartWeapon: (b: Int, h: Int, r: Int)?
+
     /// UI 测试：直接进入某个场景（不经主持人页、不记技术中断）
     func debugStart(caseID: String, participant: String) {
         participantID = participant
@@ -175,7 +178,13 @@ final class PrototypeController: ObservableObject {
         caseID = c.id
         caseKind = c.kind
         if case .playing = run.step { SessionStore.activeCase = c.id }
-        let initial = c.initialRack.map { $0.weapon(md: c.md) }
+        var initial = c.initialRack.map { $0.weapon(md: c.md) }
+        #if DEBUG
+        if let w = debugStartWeapon {
+            initial[0] = Weapon(md: c.md, blade: w.b, hilt: w.h, runePoints: w.r, rune: w.r > 0 ? c.runes.first : nil,
+                                temper: min(Rules.temperBaseline, w.b + w.h + w.r))
+        }
+        #endif
         rack = (0..<3).map { $0 < initial.count ? initial[$0] : nil }
         initialWeapon = initial.first
         battle = nil
