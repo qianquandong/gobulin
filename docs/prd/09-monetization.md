@@ -175,4 +175,4 @@ M5 接入前完成 7.6.2 的分组登录事件模拟；首测按相同关卡、�
 - 广告加载失败：按钮显示 `ad_not_ready`，不消耗次数。
 - 三个广告位以及免广告 Claim 使用同一每日计数；基础领取与额外奖励原子结算，重复回调按 transaction_id 去重。
 - 购买 “Skip Ads, Keep Rewards” 后，按钮文案变为 `btn_claim_free` “Claim”。
-- ATT（App Tracking Transparency）授权请求放在第 2 次会话，并先出一个自有的说明页 `att_preprompt`；拒绝不影响任何奖励。
+- ATT（App Tracking Transparency）只在最终 SDK/数据用途确需追踪且系统状态可请求时出现，最早第 2 次会话；先用 `att_preprompt` 说明用途，授权前不得启用追踪。没有追踪的版本不自动弹窗，拒绝不影响任何奖励。实际数据流、隐私申报和平台依据见 [上线手册 R3](../release/app-store.md#r3sdk隐私与权限)。

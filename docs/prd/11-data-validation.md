@@ -39,7 +39,7 @@
 | `settings_change` | 设置变更 | key, value | 节奏 / 震动偏好 |
 | `clock_anomaly` / `save_corrupted` / `cloud_conflict` | 异常 | direction / backup_used / choice | 技术健康 |
 
-**隐私**：只收集匿名的 install_id，不收集个人信息；ATT 拒绝时不传 IDFA；遵守 App Store 隐私标签要求。
+**隐私**：采用随机 install_id 做安装识别、cohort 统计与分组，不收集姓名或联系方式；随机 ID 不自动等于匿名，分析/崩溃 SDK 的实际字段、关联方式、接收方与用途须逐项盘点。未获得 ATT 授权时不得进行受其约束的追踪，不能只停传 IDFA 而用其他标识替代；隐私标签按应用与第三方实际行为填写，见 [上线手册 R3](../release/app-store.md#r3sdk隐私与权限)。
 
 ## 11.2 核心验证：玩家遇到困难时，是否主动更换锻造策略
 

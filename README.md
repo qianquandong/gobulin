@@ -6,6 +6,13 @@ iPhone 竖屏单手游戏：下半屏点击锻造，上半屏英雄自动战斗�
 
 | 路径 | 内容 |
 |---|---|
+| [CLAUDE.md](CLAUDE.md) | **Claude 实现入口**：职责、阅读顺序、范围与工程交接约定 |
+| [docs/production/README.md](docs/production/README.md) | **完整执行流程**：Codex 策划/美术、Claude 开发、真人测试、阶段闸门到上线 |
+| [docs/production/claude-handoff.md](docs/production/claude-handoff.md) | 可直接转交 Claude 的开工指令 |
+| [docs/production/status.md](docs/production/status.md) | 当前状态、设备/账号依赖与下一步任务 |
+| [docs/art/README.md](docs/art/README.md) | 美术方向、制作规范、分批素材与导入验收 |
+| [docs/qa/test-plan.md](docs/qa/test-plan.md) | 自动检查、真机、真人试玩与发布回归；含执行记录模板 |
+| [docs/release/app-store.md](docs/release/app-store.md) | TestFlight、隐私/商品、商店素材、审核、手动发布与热修复 |
 | [docs/prd/00-two-week-prototype.md](docs/prd/00-two-week-prototype.md) | **当前开发范围**：两周原型、试玩协议与继续/停止标准 |
 | [docs/prd/README.md](docs/prd/README.md) | **PRD 入口**：一页摘要、文档地图、标记约定、术语表 |
 | [docs/prd/](docs/prd/) | 两周原型 + 12 章正文 + 一致性检查 + 玩家可见英文文案表 |
@@ -27,6 +34,8 @@ python -m unittest discover -s tools -p "test_*.py"
 ```
 
 修改任何数值的流程：改 `tools/balance_sim.py` → 重跑并更新 `docs/balance/sim_output.md` → 同步 PRD 表格 → 运行 `check_prd.py` 直到全部通过。
+
+当前交付是策划、执行方案与数值工具，尚无可安装 iOS 客户端或最终美术资源。先完成 M0 的真实验证，再按阶段推进；文档中的验收要求不代表已经实测通过。
 
 ## 语言约定
 
