@@ -23,11 +23,11 @@ struct PlayView: View {
             controller.onBattleReset = { [weak scene] in scene?.resetBattle() }
         }
         .alert(L10n.plural("forge_unused_confirm", count: unusedCount), isPresented: binding(for: .unused)) {
-            Button(L10n.text("btn_cancel"), role: .cancel) { controller.card = nil }
+            Button(L10n.text("btn_cancel"), role: .cancel) { controller.dialog = nil }
             Button(L10n.text("btn_finish")) { controller.deliver() }
         }
         .alert(L10n.text("forge_reset_confirm"), isPresented: binding(for: .reset)) {
-            Button(L10n.text("btn_cancel"), role: .cancel) { controller.card = nil }
+            Button(L10n.text("btn_cancel"), role: .cancel) { controller.dialog = nil }
             Button(L10n.text("btn_reset"), role: .destructive) { controller.confirmReset() }
         }
         .confirmationDialog(L10n.text("rack_full_pick"), isPresented: binding(for: .rackFull), titleVisibility: .visible) {
@@ -46,20 +46,20 @@ struct PlayView: View {
     private enum Dialog { case unused, reset, rackFull }
 
     private var unusedCount: Int {
-        if case let .confirmUnused(count)? = controller.card { return count }
+        if case let .confirmUnused(count)? = controller.dialog { return count }
         return 0
     }
 
     private func binding(for dialog: Dialog) -> Binding<Bool> {
         Binding(get: {
-            switch (dialog, controller.card) {
+            switch (dialog, controller.dialog) {
             case (.unused, .confirmUnused?), (.reset, .confirmReset?), (.rackFull, .rackFull?): return true
             default: return false
             }
         }, set: { shown in
-            if !shown, controller.card != nil {
-                switch (dialog, controller.card) {
-                case (.unused, .confirmUnused?), (.reset, .confirmReset?), (.rackFull, .rackFull?): controller.card = nil
+            if !shown, controller.dialog != nil {
+                switch (dialog, controller.dialog) {
+                case (.unused, .confirmUnused?), (.reset, .confirmReset?), (.rackFull, .rackFull?): controller.dialog = nil
                 default: break
                 }
             }
@@ -238,8 +238,6 @@ struct CardOverlay: View {
                 Spacer()
                 nextButton.padding(.bottom, 64)
             }
-        case .confirmUnused, .confirmReset, .rackFull:
-            EmptyView()
         }
     }
 

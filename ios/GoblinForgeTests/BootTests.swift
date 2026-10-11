@@ -46,6 +46,27 @@ final class BootTests: XCTestCase {
         XCTAssertEqual(config.transferOrders.count, 2)
     }
 
+    /// 回归（CI run 38173476078）：战斗在锻造期间结束，不能顶掉玩家正在确认的锻造对话
+    func testBattleEndDoesNotDismissForgeDialog() {
+        let controller = PrototypeController(config: PrototypeController.loadBundledConfig())
+        controller.debugStart(caseID: "learn_swarm", participant: "UNIT")
+        defer { SessionStore.clear() }
+        controller.strike(.blade)
+        controller.requestReset()
+        XCTAssertEqual(controller.dialog, .confirmReset)
+        var steps = 0
+        while controller.battle?.isFinished == false && steps < 4000 {
+            controller.frame(delta: 0.25)
+            steps += 1
+        }
+        XCTAssertEqual(controller.battle?.isFinished, true)
+        XCTAssertNotNil(controller.card, "the battle result card is shown")
+        XCTAssertEqual(controller.dialog, .confirmReset, "the forge dialog survives the battle ending")
+        controller.confirmReset()
+        XCTAssertTrue(controller.forge.strikes.isEmpty)
+        XCTAssertNil(controller.dialog)
+    }
+
     func testDeliverCardLinesFollowPRD86() {
         let needle = Weapon(md: 10, blade: 2, hilt: 2, temper: 3)
         let broad = Weapon(md: 10, blade: 4, hilt: 3, temper: 3)

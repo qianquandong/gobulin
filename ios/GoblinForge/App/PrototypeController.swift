@@ -23,12 +23,17 @@ final class LiveStatus: ObservableObject {
     #endif
 }
 
-/// 覆盖在战场或锻造台上的卡片
+/// 覆盖在战场上的结果卡片（由战斗结果驱动）
 enum Card: Equatable {
     case victory
     case defeat(cause: DefeatCause, showTip: Bool, canRetry: Bool)
     case timeUp
     case demoComplete
+}
+
+/// 锻造台的确认对话（由玩家操作驱动）。与 Card 分开：战斗在锻造期间照常进行，
+/// 战斗结束不能顶掉玩家正在确认的对话（CI run 38173476078 录像：Victory 出现时 Reset 确认框被关掉）。
+enum ForgeDialog: Equatable {
     case confirmUnused(count: Int)
     case confirmReset
     case rackFull(Weapon)
@@ -52,6 +57,7 @@ final class PrototypeController: ObservableObject {
     @Published private(set) var forge: ForgeSession
     @Published private(set) var rack: [Weapon?] = [nil, nil, nil]
     @Published var card: Card?
+    @Published var dialog: ForgeDialog?
     /// 锻造台浮字（`forge_zone_max`、`forge_form_broad` …）
     @Published private(set) var floating: Floating?
     /// 铁匠气泡（只在允许提示的场景出现）
@@ -196,6 +202,7 @@ final class PrototypeController: ObservableObject {
         deliverLines = []
         bubble = nil
         card = nil
+        dialog = nil
         beginAttempt()
         if c.kind == .demo {
             showHint("tut_07")
@@ -373,11 +380,11 @@ final class PrototypeController: ObservableObject {
         }
     }
 
-    func requestReset() { if !forge.strikes.isEmpty { card = .confirmReset } }
+    func requestReset() { if !forge.strikes.isEmpty { dialog = .confirmReset } }
 
     func confirmReset() {
         forge.reset()
-        card = nil
+        dialog = nil
     }
 
     func cancelForge() {
@@ -389,27 +396,27 @@ final class PrototypeController: ObservableObject {
     /// Deliver：预算未用完先确认（`forge_unused_confirm`）
     func requestDeliver() {
         guard forge.canDeliver else { return }
-        if forge.remaining > 0 { card = .confirmUnused(count: forge.remaining) } else { deliver() }
+        if forge.remaining > 0 { dialog = .confirmUnused(count: forge.remaining) } else { deliver() }
     }
 
     func deliver() {
-        card = nil
+        dialog = nil
         guard let weapon = forge.deliver() else { return }
         if let slot = rack.firstIndex(where: { $0 == nil }) {
             place(weapon, at: slot)
         } else {
-            card = .rackFull(weapon)
+            dialog = .rackFull(weapon)
         }
     }
 
     /// 武器架满：熔炼所选槽位后交付（原型不涉及材料）
     func smeltAndDeliver(slot: Int) {
-        guard case let .rackFull(weapon)? = card else { return }
-        card = nil
+        guard case let .rackFull(weapon)? = dialog else { return }
+        dialog = nil
         place(weapon, at: slot)
     }
 
-    func keepForging() { card = nil }
+    func keepForging() { dialog = nil }
 
     private func place(_ weapon: Weapon, at slot: Int) {
         guard let run, let battle else { return }
