@@ -68,10 +68,80 @@ def worked_examples():
     return [dict(weapon_row(md, bp, hp, rp, rune, tem), example=name) for name, md, bp, hp, rp, rune, tem in rows]
 
 
+def random_probes():
+    """Python random.Random streams the Swift port (PyRandom) must reproduce bit for bit."""
+    import random
+    rows = []
+    for seed in (0, 1, 7, 1008, 2020, 3005, 4294967295, 4294967296, 123456789012):
+        r = random.Random(seed)
+        values = [r.random() for _ in range(5)]
+        uniform = [r.uniform(-35, 35) for _ in range(5)] + [r.uniform(0, 360) for _ in range(3)]
+        deck = list(range(12))
+        r.shuffle(deck)
+        bits = [r.getrandbits(k) for k in (1, 5, 13, 32)]
+        rows.append({"seed": seed, "random": values, "uniform": uniform, "shuffle": deck, "bits": bits})
+    return rows
+
+
+def math_probes():
+    """math.hypot (CPython vector_norm), cos/sin/atan2 values on the generating platform."""
+    import math
+    import random
+    r = random.Random(42)
+    hyp, trig = [], []
+    for _ in range(400):
+        x, y = r.uniform(-7, 7), r.uniform(-7, 7)
+        hyp.append([x, y, math.hypot(x, y)])
+    for x, y in ((3.0, 4.0), (0.0, 0.0), (1e-300, 1e-300), (6.5, 0.0), (0.1, 0.2), (5e-324, 0.0)):
+        hyp.append([x, y, math.hypot(x, y)])
+    for _ in range(200):
+        deg = r.uniform(-400, 400)
+        a = math.radians(deg)
+        x, y = r.uniform(-7, 7), r.uniform(-7, 7)
+        trig.append([deg, math.cos(a), math.sin(a), x, y, math.atan2(y, x), math.degrees(math.atan2(y, x))])
+    return {"hypot": hyp, "trig": trig}
+
+
+def enemy_rows():
+    rows = []
+    for kind in b.ENEMIES:
+        for stage in range(1, 21):
+            e = b.enemy_stats(kind, stage)
+            rows.append({"kind": kind, "stage": stage, "hp": e["hp"], "armor": e["armor"], "dmg": e["dmg"]})
+    return rows
+
+
+def battles(seeds=(1, 2, 3)):
+    """Every representative build on every stage, exactly as report_stages() runs them."""
+    rows = []
+    for s in sorted(b.STAGES):
+        a, f, br, runes = b.EXPECTED[s]
+        budget, md, hero = b.ANVIL_BUDGET[a], b.FURNACE_MD[f], b.BARRACKS_HP[br]
+        if s <= 2:
+            runes = ()
+        for w in b.builds_for(budget, md, runes):
+            for seed in seeds:
+                r = b.simulate(s, w, hero, seed)
+                lg = r["log"]
+                rows.append({
+                    "stage": s, "seed": seed, "hero": hero, "md": w["md"], "bp": w["bp"], "hp": w["hp"], "rp": w["rp"],
+                    "rune": w["rune"].lower() if w["rune"] else None, "temper": w["temper"], "label": w["label"],
+                    "win": r["win"], "t": r["t"], "hero_hp": r["hp"], "wave": r["wave"], "left": r["left"],
+                    "timeout": bool(r.get("timeout")), "boss_t": r.get("boss_t"),
+                    "log": [lg["blocked_by_guard"], lg["armor_absorbed"], lg["dealt"], lg["burn"], lg["hits"],
+                            lg["swings"], lg["max_engaged"], lg["taken"], lg["triggers"]],
+                })
+    return rows
+
+
 def build():
     return {
         "source": "tools/balance_sim.py",
         "examples": worked_examples(),
+        "random": random_probes(),
+        "enemies": enemy_rows(),
+        "battles": battles(),
+        "math": math_probes(),
         "weapons": weapons(),
     }
 
