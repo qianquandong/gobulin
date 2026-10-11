@@ -239,7 +239,7 @@
 | `tut_15` | Shells eat small hits. Fire doesn't care. | Armor 说明 | 气泡 |
 | `tut_16` | Pick a rune, then tap the RUNE slot to charge it. | 第一次符文锻造 | 气泡 |
 | `tut_17` | See? Burn goes right through. | 灼烧穿甲 | 气泡 |
-| `tut_18` | 8 strikes! Put 8 into the BLADE for a Greatsword. | 引导 Great | 气泡 |
+| `tut_18` | 8 strikes! You can forge a bigger blade now. | 引导 Great | 气泡 |
 | `tut_19` | Spin to win! | 第一次环斩 | 气泡 |
 | `tut_20` | Pip keeps fighting while you're away. Come back for the loot! | 介绍 Loot Cart | 气泡 |
 
@@ -406,6 +406,9 @@
 
 | String ID | English Text | 中文用途说明 | 出现位置 |
 |---|---|---|---|
+| `forge_tutorial_supply` | Short on materials? Gristle covers this forge. | 通关 7 前材料缺口由交付补助抵扣 | Forge 按钮旁 |
+| `smelt_undo_expired` | This action can no longer be undone. | 后续交易使熔炼无法完整撤销 | Toast |
+| `forge_subsidy_refund` | Free materials cannot be reclaimed. | 补助不参与熔炼返还 | 武器详情/熔炼 |
 | `err_not_enough_ore` | Not enough ore | Ore 不足 | Forge 按钮下方 |
 | `err_no_rune_stones` | No Rune Stones | 没有符文石 | 符文选择条 |
 | `err_save_failed` | Couldn't save. We'll try again. | 存档失败 | 全局 Toast |
@@ -415,6 +418,13 @@
 | `btn_use_cloud` | Use Cloud | 选云端 | 确认框 |
 | `btn_use_device` | Use This Device | 选本机 | 确认框（≤ 16） |
 | `update_required` | A new version is out. Please update to keep playing. | 低于远程配置的最低版本 | 全屏提示 |
+
+## 原型试玩
+
+| String ID | English Text | 中文用途说明 | 出现位置 |
+|---|---|---|---|
+| `prototype_continue` | You can finish now, or keep playing for up to three minutes. Your compensation stays the same. | 自由继续阶段的中性邀请；仅有报酬的测试使用最后一句 | 主持人口头脚本 |
+| `prototype_reason` | What did you change, and why? | 两道迁移题结束后的开放式问题 | 主持人口头脚本 |
 
 ## 问卷
 

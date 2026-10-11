@@ -22,10 +22,10 @@
 | 项 | 规则 |
 |---|---|
 | 入口 | 下半屏空闲状态下的 **Forge** 按钮（`btn_forge`）；或武器详情页的 **Reforge**（`btn_reforge`） |
-| 必要条件 | ① Ore ≥ 当前 Furnace 等级的锻造成本（见 4.3）；② 武器架有空位，**或**玩家接受交付时熔炼一把（交付时弹出选择） |
-| 可选条件 | 加符文需要：Rune Stones ≥ 1 **且** 至少解锁 1 种元素（Ember 通关 5 解锁，Frost 通关 10 解锁，Spark 通关 12 解锁） |
+| 必要条件 | 按交付报价校验净材料（重铸先抵扣旧武器返还），见 4.3；通关 7 前适用教程补助。Rack 有空位或交付时选择熔炼 |
+| 可选条件 | 新增符文需已解锁元素；需要新的 Rune Stone 时由库存支付，通关 7 前不足部分补助。同元素重铸无需库存符文石 |
 | 不需要 | 不需要暂停战斗；没有时间限制；没有体力 |
-| 不满足时 | Ore 不足：按钮置灰并显示 `err_not_enough_ore` “Not enough ore”，点击后打开 Loot Cart 说明（不弹商店）。无空位：允许开始，交付时要求熔炼 |
+| 不满足时 | 通关 7 后净材料不足才置灰并说明 Cart；通关 7 前按钮保留并显示 `forge_tutorial_supply`。无空位允许开始，交付时处理 |
 | 并发 | 同一时间只能有 1 个锻造会话（不设锻造队列，原因见 [9.3 #3](09-monetization.md#93-候选商品逐项规格)） |
 
 ## 4.3 材料与成本
@@ -37,6 +37,8 @@
 | 重铸 Reforge（保持同一元素或无符文） | 新成本 − floor(0.8 × 旧武器所付 Ore) | 0（原符文石保留） | 0 | 原武器在交付时消失 |
 | 重铸并更换/新增元素 | 同上 | 1（旧符文石销毁） | 0 | 交付前明确提示 `reforge_stone_warn` |
 | 熔炼 Smelt | +floor(0.8 × 所付 Ore) | 不返还 | 0 | 武器上锁时禁止熔炼 |
+
+**教程报价 [决定]**：通关 7 前按 [7.6.1](07-economy.md#761-教程材料兜底) 补足交付缺口；`ore_paid` 仅记录真实材料投入，不含补助。Rune 区域仍须先解锁元素，不因补助提前开放。通关 7 后恢复通常成本，补助武器的返还基数不变。
 
 **扣费时机 [决定]**：所有消耗在 **Deliver** 的一瞬间结算。之前任何时刻点 **Cancel** 都完全无损。
 
@@ -63,7 +65,7 @@ stateDiagram-v2
 
 | 阶段 | 输入 | 处理 | 输出 | 限制 / 异常 |
 |---|---|---|---|---|
-| Setup | 符文选择条：No Rune / Ember / Frost / Spark（未解锁的隐藏，没有符文石的置灰并显示 `err_no_rune_stones`） | 选择一种元素后，Rune 区域可敲 | 会话记录 rune_element | 第一次敲击后元素锁定，要改元素只能 **Reset**（清空全部敲击） |
+| Setup | 符文选择条：No Rune / Ember / Frost / Spark（未解锁的隐藏，通关 7 后需要新符文石且库存不足的置灰并显示 `err_no_rune_stones`；教程补助或同元素重铸不置灰） | 选择一种元素后，Rune 区域可敲 | 会话记录 rune_element | 第一次敲击后元素锁定，要改元素只能 **Reset**（清空全部敲击） |
 | Striking | 在 3 个区域的点击 | 判定见 4.4.3。每次有效敲击：对应点数 +1，剩余预算 −1，播放打击反馈，判定节拍（4.5），刷新预览 | 实时预览面板 | 区域达到上限：本次点击无效，不消耗预算，显示 `forge_zone_max` “Max”，轻震动 |
 | Ready | 预算用完，或点 **Finish**（`btn_finish`）且剩余 > 0 | 剩余 > 0 时弹出确认 `forge_unused_confirm` “{count} strikes unused. Finish anyway?” | — | 未用完的敲击作废，不保留到下次 |
 | Delivering | **Deliver**（`btn_deliver`） | 扣费 → 生成武器（4.12）→ 抛给英雄的动画（0.6 s）→ 进入 Rack | 武器对象 | 武器架满时先弹出熔炼选择；放弃熔炼则回到 Ready |
@@ -231,7 +233,7 @@ stateDiagram-v2
 | 锻造中关卡切换或进入 Boss Gate | 不影响锻造 |
 | 重铸 Reforge | 从武器详情页进入。新会话使用**当前** Furnace 金属与**当前**预算，敲击从 0 开始（不预填，避免和 Quick Forge 重复）。成本见 4.3。交付时旧武器被替换，同一槽位保留，装备状态继承 |
 | 替换（武器架满） | 交付前弹出熔炼选择（`rack_full_pick`），列出所有未上锁的武器及返还 Ore。全部上锁时提示 `rack_all_locked` 并回到 Ready |
-| 材料不足 | Ore 不足：Forge 与 Quick Forge 置灰（4.2）。Rune Stones 不足：符文选项置灰，可继续锻无符文武器 |
+| 材料不足 | 按 4.2 净报价判断；通关 7 前不足部分在交付时补助。符文解锁、Rack/锁定校验先于扣费；Cancel 不领取补助 |
 | 锻造会话期间 Ore 变化 | 成本在 Deliver 时校验；此时如果 Ore 不足（理论上只有被外部消耗才会发生），提示 `err_not_enough_ore` 并保留会话 |
 | 离线 | 离线不能锻造，也不能 Quick Forge；未完成的会话保留，无过期时间 |
 | 配置更新改变公式参数 | 已生成的武器保留生成时写入的 H / I / N（4.12），不回溯重算；新参数只影响之后的锻造。例外：发生 Bug 级错误时，用 `weapon_recalc_version` 强制重算，并补偿差额 |
@@ -258,7 +260,8 @@ stateDiagram-v2
 | temper | int | 0–10 |
 | form | enum | needle / broad / great |
 | hit_damage / interval / windup / rune_every | int / float / float / int | 生成时计算并写入 |
-| ore_paid | int | 用于计算熔炼与重铸返还 |
+| ore_paid | int | 本次武器的真实 Ore 投入（含旧武器返还中实际抵用的部分），不含教程补助；熔炼返还 floor(0.8 × ore_paid) |
+| tutorial_ore_subsidy / tutorial_stone_subsidy | int | 生成时补助额，仅审计；不入钱包、不得返还 |
 | locked | bool | 上锁后不能熔炼 |
 | source | enum | manual / quick_forge / tutorial |
 | created_at | int（unix s） | — |

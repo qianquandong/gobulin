@@ -1,6 +1,6 @@
 # balance_sim.py 输出快照
 
-> 由 `python tools/balance_sim.py all` 生成（2026-10-11，PRD v0.1 初始设计值）。改了 `tools/balance_sim.py` 的参数后，重跑并替换本文件，再同步 PRD 中引用的数字，最后运行 `python tools/check_prd.py`。
+> 由 `python tools/balance_sim.py all` 生成（2026-10-11，PRD v0.2）。章节1–5保留自然参考路径与战斗数值；章节6新增补助和全来源上限。M0新场景和真实登录事件进度不在此快照的验证范围。改数值后更新快照与PRD，再运行 `python tools/check_prd.py`。
 
 ## 1. 锻造算例（对应 PRD 4.9）
 
@@ -24,7 +24,6 @@
 | Needle B3/H4/R3 Ember | 27 | 0.72 | 51.5 | 34.8 | 23.7 | 14.0 | 3 |
 | Broad B4/H3/R3 Spark | 26 | 1.07 | 24.3 | 13.1 | 5.6 | 0.0 | 3 |
 | Great B8/H1/R1 Frost | 52 | 2.14 | 24.3 | 18.7 | 15.0 | 0.0 | never (interval > 1.5 s regen) |
-
 
 ## 3. 关卡验证（期望状态，每格 3 个随机种子）
 
@@ -51,7 +50,6 @@
 | 19 | 8/8/7 | 13 | 33 | 270 | Needle B3/H6/R4 Spark | Win 3/3, 43s, HP 52% | Great B8/H3/R2 Frost | Win 0/3 (dead at wave 1, 26s) |  |
 | 20 | 8/8/8 | 13 | 33 | 319 | Broad B7/H6/R0 | Win 3/3, 80s, HP 34% | Needle B3/H6/R0 | Win 0/3 (dead at wave 1, 34s) |  |
 
-
 ## 4. 资源路径（期望玩家，PRD 7.5）
 
 | Stage | Upgrades bought (coins) | Forge ore / refund / stones | First clear coins/ore/stones | Farm min before stage | Balance after (coins/ore/stones) | Cumulative idle min | ≈ Day |
@@ -76,7 +74,6 @@
 | 18 | F8, B7 (24470) | 76 / 42 / 1 | 240 / 22 / 0 | 1310 | 240 / 236 / 11.8 | 3173 | 4.3 |
 | 19 | A8 (15500) | 38 / 25 / 0 | 271 / 24 / 0 | 755 | 271 / 297 / 13.9 | 3927 | 5.1 |
 | 20 | B8 (15450) | 0 / 0 / 0 | 918 / 26 / 2 | 683 | 918 / 372 / 17.8 | 4610 | 5.8 |
-
 
 ## 5. 设施与关卡数值表（PRD 7.3 / 7.4）
 
@@ -116,3 +113,22 @@
 | 19 | 271 | 24 | 0 | 22.24 | 0.071 |
 | 20 | 918 | 26 | 2 | 24.46 | 0.076 |
 
+## 6. 教程补助与全来源加速（PRD 7.6）
+
+| Source | Extra Cart-equivalent minutes | Period / condition |
+|---|---|---|
+| Welcome back x2 | 960 | daily; two 480-minute base claims |
+| Ad Quick Loot | 90 | daily; 3 x 30 |
+| Gem Quick Loot | 360 | daily; 3 x 120 |
+| All ads | 1050 | daily; excludes Daily Rune Stone |
+| All ads + Gems | 1410 | daily; excludes weekly Supply Box |
+| Supply Box Coins | 240 | weekly; Coins only |
+
+Daily Rune Stone: +1 stone/day. Supply Box: choose Coins OR 6 stones OR 10 forge costs of Ore.
+Bonuses are paid directly; they never enter the Cart and cannot be doubled again.
+These are resource bounds at a fixed rate, not predicted days to Stage 20.
+
+| Tutorial case (highest stage / Furnace / Ore / Stones) | Wallet after O/S | ore_paid | Ore / Stone subsidy |
+|---|---|---|---|
+| 2 / 1 / 0 / 0 | 0/0 | 0 | 6 / 0 |
+| 5 / 2 / 2 / 0 | 0/0 | 2 | 6 / 1 |
