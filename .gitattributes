@@ -1,0 +1,6 @@
+# 脚本、工程与配置在 macOS/Linux/Docker 中运行，工作区也统一用 LF（本机 core.autocrlf=true）
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.mov binary
+*.mp4 binary

@@ -1,0 +1,149 @@
+name: iOS 工程与规则包
+
+on:
+  push:
+    # 只改文档时不占用 macOS runner；文案表同步由 validate.yml 的 export_strings --check 检查
+    paths-ignore: ['docs/**', '*.md']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ios-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  XCODEGEN_VERSION: "2.45.4"
+
+jobs:
+  core-linux:
+    name: 规则包测试（Linux）
+    runs-on: ubuntu-latest
+    container: swift:6.2
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - run: swift --version
+      - run: swift test --package-path Packages/GoblinForgeCore
+
+  ios-simulator:
+    name: Xcode 构建与模拟器测试（macOS）
+    runs-on: macos-15
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 选择 Xcode
+        run: bash ci/select-xcode.sh
+
+      - name: 安装锁定版本的 XcodeGen
+        run: |
+          curl -sSfL -o "$RUNNER_TEMP/xcodegen.zip" \
+            "https://github.com/yonaskolb/XcodeGen/releases/download/${XCODEGEN_VERSION}/xcodegen.zip"
+          unzip -q "$RUNNER_TEMP/xcodegen.zip" -d "$RUNNER_TEMP/xcodegen"
+          echo "$RUNNER_TEMP/xcodegen/xcodegen/bin" >> "$GITHUB_PATH"
+
+      - name: 记录构建环境
+        run: bash ci/record-environment.sh build/environment.md && cat build/environment.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: 工程未手改漂移（重新生成后与提交一致）
+        run: |
+          xcodegen generate --spec ios/project.yml
+          if [ -n "$(git status --porcelain -- ios/)" ]; then
+            git status --porcelain -- ios/
+            git diff -- ios/ | head -n 200
+            mkdir -p build/regenerated && cp -R ios/GoblinForge.xcodeproj build/regenerated/
+            echo "::error::ios/GoblinForge.xcodeproj 与 project.yml 重新生成的结果不一致；运行 xcodegen generate --spec ios/project.yml 后提交"
+            exit 1
+          fi
+
+      - name: 规则包测试（macOS）
+        run: swift test --package-path Packages/GoblinForgeCore
+
+      - name: 列出 scheme
+        run: xcodebuild -list -project ios/GoblinForge.xcodeproj
+
+      - name: 单元 + UI 测试（标准尺寸模拟器）
+        run: |
+          mkdir -p build
+          udid=$(python3 ci/pick_simulator.py standard 2>build/sim-standard.txt)
+          echo "- 标准尺寸模拟器：$(cat build/sim-standard.txt)" >> "$GITHUB_STEP_SUMMARY"
+          echo "SIM_STANDARD=$udid" >> "$GITHUB_ENV"
+          bash ci/xcodebuild.sh -project ios/GoblinForge.xcodeproj -scheme GoblinForge \
+            -destination "platform=iOS Simulator,id=$udid" \
+            -derivedDataPath build/DerivedData \
+            -resultBundlePath build/GoblinForge.xcresult \
+            CODE_SIGNING_ALLOWED=NO test
+
+      - name: 导出 UI 测试截图附件
+        if: always()
+        run: |
+          mkdir -p build/attachments
+          if [ -d build/GoblinForge.xcresult ]; then
+            xcrun xcresulttool export attachments --path build/GoblinForge.xcresult --output-path build/attachments || true
+          fi
+          ls -la build/attachments || true
+
+      - name: UI 测试（小屏 iPhone SE，最旧已安装 iOS 运行时）
+        timeout-minutes: 20
+        run: |
+          small=$(python3 ci/pick_simulator.py small 2>build/sim-small.txt)
+          echo "- 小屏模拟器：$(cat build/sim-small.txt)" >> "$GITHUB_STEP_SUMMARY"
+          bash ci/xcodebuild.sh -project ios/GoblinForge.xcodeproj -scheme GoblinForge \
+            -destination "platform=iOS Simulator,id=$small" \
+            -derivedDataPath build/DerivedData \
+            -resultBundlePath build/GoblinForge-small.xcresult \
+            -only-testing:GoblinForgeUITests \
+            CODE_SIGNING_ALLOWED=NO test
+
+      - name: 导出小屏 UI 截图附件
+        if: always()
+        run: |
+          mkdir -p build/attachments-small
+          if [ -d build/GoblinForge-small.xcresult ]; then
+            xcrun xcresulttool export attachments --path build/GoblinForge-small.xcresult --output-path build/attachments-small || true
+          fi
+
+      - name: 冷启动截图（标准尺寸）
+        timeout-minutes: 20
+        run: |
+          app=build/DerivedData/Build/Products/Debug-iphonesimulator/GoblinForge.app
+          bash ci/capture-screenshots.sh "$SIM_STANDARD" "$app" build/screenshots launch-standard
+
+      - name: Prototype 配置无签名编译（真机架构；调试入口已剔除、未接广告/内购）
+        timeout-minutes: 20
+        run: |
+          set -o pipefail   # 检查失败不能被 tee 吞掉
+          bash ci/xcodebuild.sh -project ios/GoblinForge.xcodeproj -scheme GoblinForge \
+            -configuration Prototype -destination "generic/platform=iOS" \
+            -derivedDataPath build/DerivedData-release \
+            CURRENT_PROJECT_VERSION=${{ github.run_number }} CODE_SIGNING_ALLOWED=NO build
+          bash ci/check-release-binary.sh build/DerivedData-release/Build/Products/Prototype-iphoneos/GoblinForge.app \
+            | tee build/release-check.md >> "$GITHUB_STEP_SUMMARY"
+          cat build/release-check.md
+
+      - name: 上传证据
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-evidence-${{ github.run_number }}
+          path: |
+            build/environment.md
+            build/release-check.md
+            build/screenshots
+            build/attachments
+            build/attachments-small
+            build/logs
+            build/regenerated
+          retention-days: 30
+
+      - name: 上传 xcresult
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcresult-${{ github.run_number }}
+          path: build/GoblinForge.xcresult
+          retention-days: 14
