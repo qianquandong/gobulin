@@ -6,9 +6,12 @@ Checks:
   1. Facility, stage, enemy, boss and forge-example numbers in the PRD match balance_sim.py.
   2. Every relative markdown link (file + #anchor) inside docs/ resolves to a real heading.
   3. Every player-facing string ID referenced in the PRD exists in docs/prd/strings.md.
+  4. Acceleration limits and the safeguards snapshot match balance_sim.py.
 Exit code 1 if anything fails.
 """
 import glob
+import contextlib
+import io
 import os
 import re
 import sys
@@ -132,11 +135,32 @@ def check_strings(errs):
                 errs.append(f"{rel}: string id `{sid}` not in strings.md")
 
 
+def check_economy_revision(errs):
+    """Check the new source limits and generated appendix, not gameplay validity."""
+    limits = b.acceleration_limits()
+    economy = read("docs/prd/07-economy.md")
+    for label, key in (("Welcome back ×2", "welcome"), ("Quick Loot 广告", "ad_quick"),
+                       ("Quick Loot 宝石", "gems"), ("广告合计（不含 Daily Stone）", "ads_total"),
+                       ("广告 + 宝石合计", "daily_total"), ("Supply Box Coins 选项", "supply_weekly")):
+        row = next((line for line in economy.splitlines() if line.startswith(f"| {label} |")), "")
+        value = limits[key]
+        if str(value) not in row and f"{value:,}" not in row:
+            errs.append(f"07 acceleration {label}={value}")
+    output = io.StringIO()
+    with contextlib.redirect_stdout(output):
+        b.report_safeguards()
+    snapshot = read("docs/balance/sim_output.md")
+    heading = "## 6. 教程补助与全来源加速（PRD 7.6）"
+    if heading not in snapshot or snapshot.split(heading, 1)[1].strip() != output.getvalue().strip():
+        errs.append("balance safeguards snapshot is stale")
+
+
 if __name__ == "__main__":
     problems = []
     check_numbers(problems)
     check_links(problems)
     check_strings(problems)
+    check_economy_revision(problems)
     if problems:
         print("\n".join(sorted(set(problems))))
         sys.exit(1)

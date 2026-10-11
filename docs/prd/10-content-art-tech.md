@@ -1,5 +1,9 @@
 # 10. 内容、美术与技术约束
 
+> 本章是后续完整 P0 的实现约束。当前两周 M0 只实现 [00](00-two-week-prototype.md) 的子集，不要求本章的云存档、SDK、商业化或最终美术；新的经济兜底增加的客户端工作须在 M0 后重估。
+
+制作分工、分批素材、文件/锚点规范和实机视觉验收见 [美术规范](../art/README.md) 与 [素材清单](../art/asset-manifest.md)。以下美术日为原人类制作基线，不能直接换算为 Codex 的完成日历。
+
 ## 10.1 MVP 内容清单（P0）
 
 | 类别 | 内容 | 数量 | 动画 / 状态 | 估算（美术日）[假设] |
@@ -42,12 +46,14 @@
 | 项 | 规则 |
 |---|---|
 | 位置 | App 沙盒 `Application Support/save/`，JSON（发布版可做轻度混淆与压缩），带 `schema_version` |
-| 内容 | 资源、设施等级、关卡进度与首通标记、武器列表、武器架与装备、Pattern、Codex、未完成的 `forge_session`、Cart（上次领取时间、小数累积、可信时间基准）、设置、已发放的购买（交易 ID）、广告与 Quick Loot 计数、教程标记、时钟异常标记 |
+| 内容 | 资源、设施等级、关卡进度与首通标记、武器列表、武器架与装备、Pattern、Codex、未完成的 `forge_session`、Cart（上次领取时间、小数累积、可信时间基准）、设置、已发放的购买（交易 ID）、广告与 Quick Loot 计数、bonus_stone_progress、已发放奖励交易 ID、武器教程补助标记与真实 ore_paid、教程标记、时钟异常标记 |
 | 写入时机 | 交付、通关、升级、购买发放、Cart 领取、设置变更、切到后台时立即写入；活跃期间每 30 s 写一次；锻造敲击节流为 1 s |
 | 原子性 | 写临时文件 → 同步落盘 → 重命名覆盖；保留最近 3 份轮转备份；每份带 SHA-256 校验 |
 | 损坏 | 校验失败时按时间倒序加载最近一份有效备份，并上报 `save_corrupted`；全部损坏时尝试 iCloud 副本，再不行才重置（概率应接近 0） |
 | 云端 | iCloud Key-Value Store 镜像（单个存档 < 100 KB，上限 1 MB），本地写入后 10 s 防抖同步。启动时比较 `progress_score`（最高关卡 × 10⁶ + 设施总等级 × 10³ + Codex 数）与 `saved_at`。云端领先且不一致时，让玩家选择：`cloud_conflict` “Cloud save: Stage {cloud}. This device: Stage {local}. Keep which?” |
 | 迁移 | 每个 schema 版本都有迁移函数；未知字段原样保留，不删除 |
+
+**教程补助与奖励事务**：交付、补助记账、绑定熔炼及其 Undo 按 7.6.1 整体提交；回归翻倍仅复制自然整数奖励，Quick Loot 的符文分数保存在独立累积器，按 7.6.2 去重。不得把补助加入余额后另行扣除，以免中断产生可领取余额。
 
 ## 10.4 离线结算
 
@@ -145,7 +151,7 @@
 | `enemies` | id, trait, hp, armor, guard, guard_regen_s, dmg, atk_interval_s, move_speed_u, radius_u, reach_u, hp_growth, armor_growth, dmg_growth, prefab_id, name_string_id |
 | `bosses` | id, hp, armor, guard, guard_regen_s, dmg, atk_interval_s, move_speed_u, radius_u, summon_enemy_id, summon_count, summon_interval_s, slam_interval_s, slam_telegraph_s, slam_dmg, hint_string_id |
 | `stages` | id, region_id, waves[{enemy_id, count, side}], is_boss, time_limit_s, boss_time_limit_s, first_clear_coins, first_clear_ore, first_clear_stones, first_clear_gems, unlocks[], expected_state（QA 用） |
-| `economy` | cart_coin_base, cart_coin_growth, cart_ore_base, cart_ore_growth, cart_cap_min, stone_interval_min, stone_cap, stone_overflow_minutes, wave_heal_ratio, max_attackers, spawn_gap_s, wave_gap_s, spawn_dist_u |
+| `economy` | cart_coin_base, cart_coin_growth, cart_ore_base, cart_ore_growth, cart_cap_min, tutorial_clear_stage, welcome_double_cap, gem_quick_minutes, gem_quick_cap, ad_quick_minutes, ad_quick_cap, supply_coins_minutes, stone_interval_min, stone_cap, stone_overflow_minutes, wave_heal_ratio, max_attackers, spawn_gap_s, wave_gap_s, spawn_dist_u |
 | `codex` | form_id, rune_id, reward_gems, tip_string_id |
 | `iap_products` | product_id, type, price_ref_cny, contents{}, purchase_limit, limit_period, show_after_stage, enabled |
 | `ad_placements` | id, reward{}, daily_cap, show_after_stage, enabled |
@@ -158,4 +164,4 @@
 | Unity（2D，LTS 版本） | 程序熟悉 Unity；以后可能出 Android；广告聚合 SDK 支持成熟 | 包体与启动时间需要优化 |
 | SpriteKit（Swift） | 程序是 iOS 原生背景；只做 iPhone | 以后移植 Android 等于重写 |
 
-**决定方式**：按程序的现有经验选择，在 M0 第 1 周结束前确定。无论选哪个，都要求战斗逻辑与渲染分离（纯逻辑层可以无界面运行），这样 `tools/balance_sim.py` 的规则能用单元测试逐条比对。
+**决定方式**：按程序的现有经验与实际构建条件选择，在 M0 第 1 天确定并写引擎 ADR，记录精确版本、构建与真机安装路径。无论选哪个，都要求战斗逻辑与渲染分离（纯逻辑层可以无界面运行），这样 `tools/balance_sim.py` 的规则能用单元测试逐条比对。具体开工任务为 [BOOT-01](../production/backlog.md)。

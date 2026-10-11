@@ -8,6 +8,7 @@ rerun it and update the PRD.
     python tools/balance_sim.py matrix    # per-hit damage vs each enemy trait
     python tools/balance_sim.py stages    # stages 1-20: recommended build vs counter-pick build
     python tools/balance_sim.py economy   # first 20 stages: resource path and farm time
+    python tools/balance_sim.py safeguards # tutorial subsidy and all acceleration sources
     python tools/balance_sim.py all
 """
 import math
@@ -536,9 +537,74 @@ def report_all_builds(stage):
 # ----------------------------------------------------------------------------
 START = dict(coins=0, ore=20, stones=0, gems=0)
 ORE_REFUND = 0.8        # smelting returns 80% of the ore (rounded down); rune stones are NOT returned
-STONE_IDLE_MIN = 360    # Loot Cart: +1 Rune Stone per 360 accrued minutes once Stage 5 is cleared
+STONE_IDLE_MIN = 360    # +1 Rune Stone per 360 minutes once Cart opens after Stage 7
 IDLE_CAP_MIN = 480      # offline accrual cap: 8 h
 STONE_CAP = 20          # extra stones over the cap turn into coins (see PRD 7.1)
+TUTORIAL_CLEAR_STAGE = 7
+NATURAL_MIN_PER_DAY = 960
+WELCOME_DOUBLE_CAP = 2
+GEM_QUICK_MIN, GEM_QUICK_CAP = 120, 3
+AD_QUICK_MIN, AD_QUICK_CAP = 30, 3
+SUPPLY_COINS_MIN = 240   # one weekly purchase, not a daily reward
+
+
+def forge_quote(highest_stage, furnace_lv, ore, stones, *, needs_stone=False,
+                old_ore_paid=None):
+    """Atomic Deliver quote. Subsidy is consumed in-place, never credited to a wallet.
+
+    old_ore_paid is the refundable basis of the weapon being replaced/smelted.
+    Same-element reforging sets needs_stone=False; a new/changed rune sets it True.
+    This models material accounting only, not unlocks, locks or rack validation.
+    """
+    if ore < 0 or stones < 0 or (old_ore_paid is not None and old_ore_paid < 0):
+        raise ValueError("resource balances must be nonnegative")
+    cost = FURNACE_ORE[furnace_lv]
+    refund = math.floor(ORE_REFUND * old_ore_paid) if old_ore_paid is not None else 0
+    real_ore = min(cost, ore + refund)
+    missing_ore = cost - real_ore
+    missing_stone = int(needs_stone and stones < 1)
+    tutorial = highest_stage < TUTORIAL_CLEAR_STAGE
+    if not tutorial and (missing_ore or missing_stone):
+        return None
+    return dict(ore_after=ore + refund - real_ore,
+                stones_after=stones - int(needs_stone and stones >= 1),
+                ore_paid=real_ore, ore_subsidy=missing_ore,
+                stone_subsidy=missing_stone, refund=refund)
+
+
+def acceleration_limits():
+    """Fixed-rate resource equivalents; NOT a calendar progression simulation."""
+    welcome = WELCOME_DOUBLE_CAP * IDLE_CAP_MIN
+    ad_quick = AD_QUICK_CAP * AD_QUICK_MIN
+    gems = GEM_QUICK_CAP * GEM_QUICK_MIN
+    return dict(welcome=welcome, ad_quick=ad_quick, gems=gems,
+                ads_total=welcome + ad_quick, daily_total=welcome + ad_quick + gems,
+                supply_weekly=SUPPLY_COINS_MIN)
+
+
+def report_safeguards():
+    limits = acceleration_limits()
+    print("| Source | Extra Cart-equivalent minutes | Period / condition |")
+    print("|---|---|---|")
+    for name, value, period in (
+        ("Welcome back x2", limits["welcome"], "daily; two 480-minute base claims"),
+        ("Ad Quick Loot", limits["ad_quick"], "daily; 3 x 30"),
+        ("Gem Quick Loot", limits["gems"], "daily; 3 x 120"),
+        ("All ads", limits["ads_total"], "daily; excludes Daily Rune Stone"),
+        ("All ads + Gems", limits["daily_total"], "daily; excludes weekly Supply Box"),
+        ("Supply Box Coins", limits["supply_weekly"], "weekly; Coins only")):
+        print(f"| {name} | {value} | {period} |")
+    print()
+    print("Daily Rune Stone: +1 stone/day. Supply Box: choose Coins OR 6 stones OR 10 forge costs of Ore.")
+    print("Bonuses are paid directly; they never enter the Cart and cannot be doubled again.")
+    print("These are resource bounds at a fixed rate, not predicted days to Stage 20.")
+    print()
+    print("| Tutorial case (highest stage / Furnace / Ore / Stones) | Wallet after O/S | ore_paid | Ore / Stone subsidy |")
+    print("|---|---|---|---|")
+    for stage, furnace, ore, stones, rune in ((2, 1, 0, 0, False), (5, 2, 2, 0, True)):
+        q = forge_quote(stage, furnace, ore, stones, needs_stone=rune)
+        print(f"| {stage} / {furnace} / {ore} / {stones} | {q['ore_after']}/{q['stones_after']} | "
+              f"{q['ore_paid']} | {q['ore_subsidy']} / {q['stone_subsidy']} |")
 
 
 def first_clear_reward(s):
@@ -621,7 +687,7 @@ def report_economy(show=True):
             farm = max(farm, (forge_stones - stones) * STONE_IDLE_MIN)
         coins += farm * rc
         ore += farm * ro
-        if s - 1 >= 5:
+        if s - 1 >= TUTORIAL_CLEAR_STAGE:
             stones += farm / STONE_IDLE_MIN
         coins -= cost
         ore -= net_ore
@@ -638,7 +704,7 @@ def report_economy(show=True):
               " Farm min before stage | Balance after (coins/ore/stones) | Cumulative idle min | ≈ Day |")
         print("|---|---|---|---|---|---|---|---|")
         for (s, ups, cost, fo_, rf, fst, fc, fo, fs, farm, c, o, st, it, at) in rows:
-            day = 1 + it / 960
+            day = 1 + it / NATURAL_MIN_PER_DAY
             print(f"| {s} | {ups} ({cost}) | {fo_} / {rf} / {fst} | {fc} / {fo} / {fs} | {farm:.0f} |"
                   f" {c:.0f} / {o:.0f} / {st:.1f} | {it:.0f} | {day:.1f} |")
     return rows
@@ -673,5 +739,7 @@ if __name__ == "__main__":
         report_economy(); print()
     if what in ("tables", "all"):
         report_tables(); print()
+    if what in ("safeguards", "all"):
+        report_safeguards(); print()
     if what.startswith("stage="):
         report_all_builds(int(what.split("=")[1]))

@@ -43,8 +43,8 @@
 
 **[决定] 构筑设计约束（防止通吃）：**
 
-1. 每种形态至少有一种敌人特性能让它**失败**：Needle 输给 Swarm（关卡 3、5）；Broad 输给 Armor（关卡 6、7、Ironhide）；Great 输给 Guard（关卡 8、Thornwarden）。
-2. 每种特性至少有**两种**锻造答案（一种靠形态，一种靠符文）：Swarm → Broad / Great / Spark；Armor → Great / Ember；Guard → Needle / Broad / Spark。
+1. 以下结论只针对表中对应预算、分配与符文；不宣称同形态的所有组合都一样。每种形态至少有一种敌人特性能让它**失败**：Needle 输给 Swarm（关卡 3、5）；Broad 输给 Armor（关卡 6、7、Ironhide）；Great 输给 Guard（关卡 8、Thornwarden）。
+2. 单特性机制至少有**两种**锻造答案；混合关卡还须单独验证，不由这个机制表自动保证多解。每种特性至少有**两种**锻造答案（一种靠形态，一种靠符文）：Swarm → Broad / Great / Spark；Armor → Great / Ember；Guard → Needle / Broad / Spark。
 3. 没有可以付费购买的专属形态或符文（[9.5](09-monetization.md#95-是否破坏构筑选择逐项评估)）。
 
 ### 6.3.1 双武器换装（关卡 14）
@@ -100,10 +100,10 @@
 
 | 功能 | 规则 |
 |---|---|
-| 熔炼 Smelt（`btn_smelt`） | 返还 floor(0.8 × 该武器所付 Ore)；Rune Stone 不返还；需要确认 `smelt_confirm` “Smelt {name}? You get {ore} Ore back.” |
+| 熔炼 Smelt（`btn_smelt`） | 返还 floor(0.8 × ore_paid)，教程补助不计入 ore_paid；Rune Stone 不返还；需要确认 `smelt_confirm` “Smelt {name}? You get {ore} Ore back.” |
 | 重铸 Reforge | 等价于“熔炼 + 新锻”，同元素保留符文石（[4.3](04-forge-system.md#43-材料与成本)） |
 | 上锁 Lock（`btn_lock`） | 上锁的武器不能熔炼，也不会出现在“武器架已满”的熔炼列表中 |
 | 收藏 Codex | 12 格图鉴（3 形态 × 无 / Ember / Frost / Spark）。首次手动锻造对应组合时点亮该格并奖励 20 Gems，一共 240。Quick Forge 不点亮（鼓励手动尝试新组合）。每格显示一句英文用法提示（`codex_tip_*`） |
 | 武器架上限 | 3 / 4 / 5 格（通关 8、15 时扩展）。**不出售武器架格子**（[9.5](09-monetization.md#95-是否破坏构筑选择逐项评估)） |
-| 返还上限与防刷 | 熔炼返还低于锻造成本（80%），反复锻造 + 熔炼必然净消耗 Ore，不存在套利 |
+| 返还上限与防刷 | 熔炼返还低于锻造成本（80%），正常锻造循环净消耗 Ore；全补助武器返还 0，补助循环不能增加可变现材料，见 7.6.1 |
 | 误熔炼 | 熔炼后 5 s 内可以点 Toast 上的 **Undo**（`btn_undo_smelt`）恢复武器并扣回返还 |

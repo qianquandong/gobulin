@@ -2,9 +2,11 @@
 
 > 本章所有指标目标均为**实验假设**，用来判断继续、调整还是停止，不是行业基准，也不代表承诺。
 
+**阶段口径**：M0 的 12 人无提示迁移与继续标准以 [00](00-two-week-prototype.md) 为准；本章完整事件表用于后续版本。原型、固定状态试玩、正式经济玩家必须分开，不混算留存/ARR。
+
 ## 11.1 埋点事件
 
-公共属性（每个事件都带）：`install_id`、`session_id`、`app_version`、`config_version`、`ab_bucket`、`install_age_days`、`highest_stage`、`anvil_lv`、`furnace_lv`、`barracks_lv`、`coins`、`ore`、`stones`、`gems`、`ts_utc`。
+公共属性（每个事件都带）：`install_id`、`session_id`、`app_version`、`config_version`、`ab_bucket`、`install_age_days`、`highest_stage`、`anvil_lv`、`furnace_lv`、`barracks_lv`、`coins`、`ore`、`stones`、`gems`、`ts_utc`、`build_mode`（prototype / fixed_state / economy）、`case_id`、`hint_policy`。
 
 | 事件 | 触发条件 | 关键属性 | 分析用途 |
 |---|---|---|---|
@@ -12,7 +14,7 @@
 | `session_end` | 切到后台 | duration_s, stages_cleared, forges, swaps, ads_watched | 会话时长（目标 3–5 分钟） |
 | `tutorial_step` | 每个教程步骤完成（`tut_01`–`tut_20`） | step_id, elapsed_since_install_s | 教程漏斗、前 10 分钟节奏 |
 | `forge_start` | 进入 Setup | source（manual / reforge / quick_forge）, context（idle / after_defeat / boss_gate / wave_break / tutorial）, stage_id, next_wave_trait, budget, md | 锻造是不是在回应战场 |
-| `forge_complete` | Deliver 成功 | weapon_id, form, bp, hp, rp, rune, temper, strikes_unused, duration_s, undo_count, reset_count, ore_spent, stone_spent, smelted_weapon_id, form_changed_vs_equipped, tags[]（Good vs …）, source | 构筑分布、Temper 分布、手动 vs 自动 |
+| `forge_complete` | Deliver 成功 | weapon_id, form, bp, hp, rp, rune, temper, strikes_unused, duration_s, undo_count, reset_count, ore_spent, stone_spent, tutorial_ore_subsidy, tutorial_stone_subsidy, smelted_weapon_id, form_changed_vs_equipped, tags[]（Good vs …）, source | 构筑分布、Temper 分布、手动 vs 自动 |
 | `forge_cancel` | Cancel | phase, strikes_done, duration_s | 犹豫与退出点 |
 | `forge_strike_sample` | 1% 抽样的单次敲击 | zone, perfect, interval_ms | 节奏窗口调参、连点器识别 |
 | `weapon_swap` | 换装生效 | from_form, to_form, from_rune, to_rune, context（wave_break / in_wave / boss_gate / auto_equip）, was_suggested, wave_trait | 推荐标签是否有用 |
@@ -23,10 +25,13 @@
 | `hint_shown` | 显示推荐标签、3 次失败配方 | hint_type, stage_id, recommended_tags | 提示强度实验 |
 | `boss_gate` | 进入与离开 Boss Gate | boss_id, wait_s, changed_gear | Boss 前是否准备 |
 | `upgrade` | 设施升级 | facility, to_level, cost, coins_after | 资源流 |
-| `cart_collect` | 领取 Cart | minutes, coins, ore, stones, ad_double, was_capped | 离线收益、上限触达率 |
+| `material_blocked` | 报价材料不足 | required_ore, available_ore, required_stones, available_stones, tutorial_covered, wait_s | 区分资源等待与不会改锻 |
+| `content_exhausted` | 首次清完该版本可用内容 | last_available_stage, elapsed_since_install_s | D7 内容充足检查；不从留存分母删除 |
+| `transfer_result` | 无提示迁移结束 | case_id, attempts, success, hint_exposed, reason_code | 与 ARR 分开评价自主理解 |
+| `cart_collect` | 领取 Cart | minutes, coins, ore, stones, ad_double, was_capped, natural_reward, bonus_reward, transaction_id | 离线收益、上限触达率 |
 | `quick_loot` | 使用 Quick Loot | source（ad / gems）, minutes | 加速使用 |
 | `codex_unlock` | 点亮 Codex | form, rune | 组合探索 |
-| `comprehension_survey` | 首次交付 Broad、首次交付符文武器后的一题问卷（可跳过） | question_id, answer, is_correct, skipped | 可理解性（11.2） |
+| `comprehension_survey` | 首次学习后的一题问卷（可跳过）；迁移测试需延后到全部题目结束 | question_id, answer, is_correct, skipped | 可理解性（11.2） |
 | `store_open` | 打开商店 | entry_point | 付费漏斗 |
 | `offer_impression` | 首购卡、免广告卡展示 | offer_id, placement | 推荐频率 |
 | `iap_start` / `iap_success` / `iap_fail` / `iap_restore` / `iap_revoked` | StoreKit 事件 | product_id, price_tier, currency, error_code, tx_hash | 转化、失败原因 |
@@ -34,7 +39,7 @@
 | `settings_change` | 设置变更 | key, value | 节奏 / 震动偏好 |
 | `clock_anomaly` / `save_corrupted` / `cloud_conflict` | 异常 | direction / backup_used / choice | 技术健康 |
 
-**隐私**：只收集匿名的 install_id，不收集个人信息；ATT 拒绝时不传 IDFA；遵守 App Store 隐私标签要求。
+**隐私**：采用随机 install_id 做安装识别、cohort 统计与分组，不收集姓名或联系方式；随机 ID 不自动等于匿名，分析/崩溃 SDK 的实际字段、关联方式、接收方与用途须逐项盘点。未获得 ATT 授权时不得进行受其约束的追踪，不能只停传 IDFA 而用其他标识替代；隐私标签按应用与第三方实际行为填写，见 [上线手册 R3](../release/app-store.md#r3sdk隐私与权限)。
 
 ## 11.2 核心验证：玩家遇到困难时，是否主动更换锻造策略
 
@@ -43,6 +48,8 @@
 - **特性失配失败**：`stage_end.result = lose`，且 `defeat_cause ∈ {guard, armor, swarm}`。
 - **对症响应**：失败后，在同一关的下一次 `stage_start` 之前（且 15 分钟以内），玩家完成一次 `forge_complete` 或 `weapon_swap`，并且新装备的 `tags[]` 含有 “Good vs {defeat_cause}”。
 - **被动刷数值**：失败后到下一次尝试之间只有 `upgrade`，没有对症的锻造或换装。
+
+ARR 按 `hint_policy` 与实际 `hint_shown` 分层：无提示、方向提示、具体配方分别报告；同时给出用户级比例，避免少数重复失败者主导事件级 ARR。未再次挑战者仍留在失败分母。ARR 高只能说明响应发生，不能单独证明自主理解；两题无提示迁移按第 0 章另算。
 
 ### 11.2.2 指标与实验假设
 
@@ -72,7 +79,7 @@
 | 换装关表现 | 关卡 14 的通关玩家中，在波次间隔换过装的比例 | ≥ 40% |
 | Codex 进度 | D7 时的 Codex 平均点亮数 | ≥ 7 / 12 |
 | 资源流 | 每日来源与消耗（按资源分）；Coins 余额分布；Ore 余额 < 1 次锻造成本的玩家占比；符文石触顶比例 | Ore 不足占比 < 10%；符文石触顶 < 10% |
-| 留存 | D1 / D3 / D7 | ≥ 40% / 25% / 15% |
+| 留存 | D1 / D3 / D7，按安装后 24–48 / 72–96 / 168–192 h 窗口内有有效游玩定义，原始安装 cohort 为分母 | 完整首测目标 ≥40% / 25% / 15%；短内容验证版只用 D1 决策，D7 依 11.6 判断是否可解释 |
 | 会话 | 每日会话数；会话时长中位数 | ≥ 3 次；3–6 分钟 |
 | Cart 上限触达率 | 领取时已满 8 h 的比例 | 30–60%（太高说明上限太短，太低说明可以不必上线） |
 | 稳定性 | 无崩溃会话占比 | ≥ 99.5% |
@@ -88,7 +95,7 @@
 | D7 付费率 | 7 日内付费玩家 / 新增 | ≥ 1.5% |
 | ARPPU / ARPDAU | 分 IAP 与广告分别统计 | 首测基线，用于 LTV 估算 |
 | 付费与免费的构筑差异 | 付费玩家与免费玩家形态使用率之差 | < 10 个百分点（验证“不卖强度”） |
-| 付费加速 | 付费玩家到达关卡 15 的天数 − 免费玩家 | ≥ −1.5 天（不能更快太多） |
+| 付费加速 | 分离自然、广告、宝石、广告+宝石及 Supply Box 组，比较关卡 15/20 到达时间分布 | 先建立真实基线；撤回最多提前 1.5 天的承诺，接受范围在 M5 登录事件模拟后冻结 |
 | LTV / CPI | 测试市场 30 日 LTV 估算 / 实际 CPI | ≥ 1.2 才考虑扩大投放 |
 
 ## 11.5 收入目标分析（若讨论“亿元”目标）
@@ -136,12 +143,22 @@ G = ¥100,000,000（12 个月 IAP 流水），commission = 30%，tax = 7%（假�
 
 ## 11.6 继续、调整、停止的条件
 
-首测分两阶段，每阶段 ≤ 3 周，最多 2 轮调整迭代（每轮 2 周）。
-
-| 结论 | 条件（全部基于首测数据） | 下一步 |
+| 阶段 | 继续条件 [假设] | 不得据此推断 |
 |---|---|---|
-| **继续** | ARR ≥ 50%，理解率（Broad）≥ 70%，D1 ≥ 40%，D7 ≥ 15%，教程完成率 ≥ 70%，无崩溃会话 ≥ 99.5% | 进入阶段 2（付费市场）→ 开发 P1（Trial Tower、关卡 21–30、外观商店） |
-| **调整：核心理解** | ARR 30–50%，或理解率 50–70% | 改失败报告、推荐标签、交付卡片；提示强度 A/B（实验 3）；最多 2 轮 |
-| **调整：中长期** | ARR 达标、D1 达标，但 D7 < 15% | 提前做每日委托与 Trial Tower；检查关卡 8–15 的卡点 |
-| **调整：商业** | 留存达标，付费率 < 1% 或 LTV / CPI < 1 | 调商品组合、展示时机与价格档。**不出售强度** |
-| **停止或转向** | 2 轮迭代后：ARR < 30%（玩家不用锻造策略应对困难），**或** D1 < 30% 且 D7 < 8%，**或** 行动项 C-1 证明竞品已实现同样的机制且本作各项指标没有更好 | 停止投入，或保留锻造台、换核心战斗（例如改成塔防）后重新立项 |
+| 两周 M0 | 第 0 章四项体验指标及有效性门槛全部通过 | D1/D7、商业可行、正式数值平衡 |
+| M1/E-1 固定状态切片 | 12 名新用户按无提示协议测试，沿用 M0 理解与迁移门槛；首分钟反馈达标，关键资源/提示无阻塞 | 被补满资源的试玩可以代表真实留存 |
+| 1–10 关验证版 | ARR ≥50%（提示分层），Broad 理解 ≥70%，新用户迁移复测达标，D1 ≥40%，教程完成 ≥70%，无崩溃会话 ≥99.5% | 用约 Day1.4 耗尽的内容直接判断 D7；D7 仅描述，不是通过/停止条件 |
+| 完整首测版 | 上述核心门槛持续达标；完成经济分组模拟；内容充足时增加 D7 ≥15% 条件 | 只因已有 20 关就自动认为足够测 D7 |
+
+**D7 内容充足检查**：实验开始前锁定配置和可用内容，记录首次 `content_exhausted`。若安装后 168 h 前已耗尽内容的人数达到 cohort 的 10%，或预先模拟已显示大部分内容会在这之前结束，则将 D7 标记为“受内容截断”，不启用其通过/停止闸门。仍报告全 cohort 的原始 D7、耗尽比例和时间；不得剔除通关者重新计算一个更漂亮的留存。10% 是待验证的运营阈值，不能靠延长金币等待满足它。可先补可重复且有选择的挑战，再用新的完整 cohort 测试。
+
+**样本与时间**：1–10 关验证版先招 300–1,000 安装，按有效埋点检查，报告人数、比例及 95% 置信区间。D1 必须等完整观察窗结束；第 12 周开始发测试包不等于第 12 周已有 D7 数据。M3 之后至少另留 1 周观察/复盘，不能在未读到数据前默认启动 M4。提示 A/B 样本不足以判断 10 个百分点差异时，只报告探索结果，不宣称胜出；具体样本量按试跑基线再计算。
+
+**调整与停止**：
+
+- M0 最多追加一轮 5 个工作日，复测仍未达门槛则停止/转向；测试无效先补证据，见 0.6。
+- 后续核心理解不足：区分首分钟反馈、提示依赖、难度与经济阻塞，每轮只改主要原因，最多两轮、每轮两周。
+- ARR 达标但无提示迁移差，先调整选择空间与可读性，不以更强配方提示宣布玩法通过。
+- D1 达标而 D7 低：先做内容充足检查，再判断挑战/成长循环；短内容版不能据 D7 判死刑。
+- 完整且内容充足的首测两轮后仍 ARR <30%，或 D1 <30% 且 D7 <8%，进入停止/转向评审；同时结合无提示迁移与逐人观察，避免单一指标误判。
+- 留存达标但付费不足：调商品与展示，维持不出售专属构筑的边界；不得在尚未完成全来源经济模拟时扩大投放。
