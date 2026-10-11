@@ -37,6 +37,15 @@ final class PrototypeUITests: XCTestCase {
         return false
     }
 
+    /// 等待标签变成期望值（操作后的界面更新是异步的；iOS 18 的 alert 动作在收起动画之后才执行）
+    private func assertLabel(_ id: String, _ expected: String, _ message: String = "",
+                             file: StaticString = #filePath, line: UInt = #line) {
+        let element = app.staticTexts[id]
+        let predicate = NSPredicate(format: "label == %@", expected)
+        let ok = XCTWaiter().wait(for: [XCTNSPredicateExpectation(predicate: predicate, object: element)], timeout: 3) == .completed
+        XCTAssertTrue(ok, "\(id): expected \"\(expected)\", got \"\(element.label)\" \(message)", file: file, line: line)
+    }
+
     private func attach(_ name: String) {
         let shot = XCTAttachment(screenshot: app.screenshot())
         shot.name = name
@@ -61,24 +70,25 @@ final class PrototypeUITests: XCTestCase {
 
     func testForgeUndoResetCancelLeaveNoResidue() {
         launch("learn_swarm")
-        XCTAssertEqual(app.staticTexts["forge.remaining"].label, "10 strikes left")
+        assertLabel("forge.remaining", "10 strikes left")
         strike("blade", 4)
-        XCTAssertEqual(app.staticTexts["forge.remaining"].label, "6 strikes left")
-        XCTAssertEqual(app.staticTexts["forge.form"].label, "BROAD")
+        assertLabel("forge.remaining", "6 strikes left")
+        assertLabel("forge.form", "BROAD")
         app.buttons["forge.undo"].tap()
-        XCTAssertEqual(app.staticTexts["forge.remaining"].label, "7 strikes left")
-        XCTAssertEqual(app.staticTexts["forge.form"].label, "NEEDLE")
+        assertLabel("forge.remaining", "7 strikes left")
+        assertLabel("forge.form", "NEEDLE")
         app.buttons["forge.reset"].tap()
         app.alerts.buttons["Reset"].tap()
-        XCTAssertEqual(app.staticTexts["forge.remaining"].label, "10 strikes left")
+        assertLabel("forge.remaining", "10 strikes left")
         strike("rune", 1)
+        usleep(500_000)   // 否定检查：先等界面有机会更新，避免“立即等于 10”掩盖迟到的错误变化
         XCTAssertEqual(app.staticTexts["forge.remaining"].label, "10 strikes left", "RUNE needs an element first")
         app.buttons["forge.rune.ember"].tap()
         strike("rune", 2)
         strike("hilt", 1)
-        XCTAssertEqual(app.staticTexts["forge.remaining"].label, "7 strikes left")
+        assertLabel("forge.remaining", "7 strikes left")
         app.buttons["forge.cancel"].tap()
-        XCTAssertEqual(app.staticTexts["forge.remaining"].label, "10 strikes left")
+        assertLabel("forge.remaining", "10 strikes left")
         XCTAssertEqual(app.buttons["forge.zone.rune"].value as? String, "0")
     }
 
