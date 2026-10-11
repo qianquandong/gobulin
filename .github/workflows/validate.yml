@@ -22,3 +22,4 @@ jobs:
       - run: python tools/check_prd.py
       - run: python -m unittest discover -s tools -p "test_*.py" -v
       - run: python tools/export_strings.py --check
+      - run: python tools/export_core_reference.py --check
